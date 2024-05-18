@@ -1,41 +1,43 @@
 <template>
     <el-card class="box-card" shadow="hover" style="margin: 10px 0;" :body-style="{ background: '#f9fafb' }">
         <el-row type="flex" align="middle">
-            <el-col :span="1">
+            <el-col :xl="1" :lg="2" :md="2" :sm="3" :xs="3">
                 <el-row>
-                    <el-col :span="24">
-                        <el-button @click="like()" type="primary" size="large"><el-icon><Top /></el-icon> {{ likes }}</el-button>
+                    <el-col>
+                        <el-button v-if="!post.current_user_likes" @click="like()" size="large"><el-icon><Top /></el-icon> {{ post.likes_count }}</el-button>
+                        <el-button v-else @click="unlike()" type="primary" size="large"><el-icon><Top /></el-icon> {{ post.likes_count }}</el-button>
                     </el-col>
                 </el-row>
                 <br>
                 <el-row>
-                    <el-col :span="24">
-                        <el-button @click="dislike()" type="primary" size="large"><el-icon><Bottom /> </el-icon> {{ dislikes }}</el-button>
+                    <el-col>
+                        <el-button v-if="!post.current_user_dislikes" @click="dislike()" size="large"><el-icon><Bottom /> </el-icon> {{ post.dislikes_count }}</el-button>
+                        <el-button v-else @click="undislike()" type="primary" size="large"><el-icon><Bottom /> </el-icon> {{ post.dislikes_count }}</el-button>
                     </el-col>
                 </el-row>
             </el-col>
-            <el-col :span="23">
-                <el-row>
-                    <el-col :span="24">
-                        <el-text style="margin-right: 10px;" size="large">{{ post.title }}</el-text><el-text type="primary"><a :href=post.url target="_blank">{{ post.url }}</a></el-text>
+            <el-col :xl="23" :lg="22" :md="22" :sm="21" :xs="21">
+                <el-row style="margin-bottom: 5px; height: 30px;">
+                    <el-col>
+                        <el-button type="text" @click="goToPost" style="font-size: large;">{{ post.title }}</el-button>
+                        <el-text type="primary" style="margin-left:10px"><a :href="formatUrl(post.url)" target="_blank">{{ post.url }}</a></el-text>                   
                     </el-col>
                 </el-row>
-                
-                <el-row>
-                    <el-col :span="24">
-                        <el-button type="text" @click="goToUser()" size="small">{{ post.user_name }},</el-button>
-                        <el-text>{{ timeAgo(post.created_at) }} to</el-text>
-                        <el-button type="text" @click="goToMagazine()" size="small">{{ post.magazine_name }}</el-button>
+                <el-row style="margin-bottom: 30px; height: 15px;">
+                    <el-col >
+                        <el-button type="text" @click="goToUser()" >{{ post.user_name }}</el-button>
+                        <el-text>, {{ timeAgo(post.created_at) }} to </el-text>
+                        <el-button type="text" @click="goToMagazine()">{{ post.magazine_name }}</el-button>
                     </el-col>
                 </el-row>
-                <br>
                 <el-row>
-                    <el-col :span="24">
-                        <el-text>{{ post.comments_count }} comments</el-text>
-                        <el-button @click="boost()" size="small" style="margin-left: 10px;">boost({{ boosts }})</el-button>
+                    <el-col >
+                        <el-button type="text" @click="goToPost" size="small" style="margin-left:-10px">{{ post.comments_count }} comments</el-button>
+                        <el-button v-if="!post.current_user_boosts" @click="boost()" size="small" style="margin-left: 10px;">boost ({{ post.boosts_count }})</el-button>
+                        <el-button v-else @click="unboost()" size="small" type="primary" style="margin-left: 10px;">unboost ({{ post.boosts_count }})</el-button>
                     </el-col>
                 </el-row>
-            </el-col>
+            </el-col>  
         </el-row>
     </el-card>
 </template>
@@ -47,16 +49,6 @@ import { ElMessage } from 'element-plus'; // for Vue 3
 
 export default {
     name: 'PostComponent',
-    data() {
-        return {
-            likes: 0,
-            dislikes: 0,
-            boosts: 0,
-            liked: true,
-            disliked: false,
-            boosted: false
-        }
-    },
     props: {
         post: {
             type: Object,
@@ -65,80 +57,71 @@ export default {
     },
     methods: {
         timeAgo(date) {
-      return moment(date).fromNow();
-    },
-        async getPost() {
-            this.likes = this.post.likes_count;
-            this.dislikes = this.post.dislikes_count;
-            this.boosts = this.post.boosts_count;
+            return moment(date).fromNow();
+        },
+        formatUrl(url) {
+            if (!/^https?:\/\//i.test(url)) {
+                url = 'http://' + url;
+            }
+            return url;
         },
         async like() {
-            try{
-                const response = await posts.like(this.post.id);
-                if (response.status === 200) {
-                    this.likes = response.data.likes_count;
-                    this.dislikes = response.data.dislikes_count;
-                }
-                else ElMessage.error('Error liking post');
-            } catch (error) {
-                if (error.response.status === 409) {
-                    const response = await posts.unlike(this.id);
-                    if (response.status === 200) {
-                        this.likes = response.data.likes_count;
-                        this.dislikes = response.data.dislikes_count;
-                    }
-                    else ElMessage.error('Error liking post');
-                }
-                else ElMessage.error('Error liking post');
+            const response = await posts.like(this.post.id);
+            if (response.status === 200) {
+                this.$emit('updatePost', response.data);
             }
+            else ElMessage.error('Error liking post');
+        },
+        async unlike() {
+            const response = await posts.unlike(this.post.id);
+            if (response.status === 200) {
+                this.$emit('updatePost', response.data);
+            }
+            else ElMessage.error('Error unliking post');
         },
         async dislike() {
-            try{
-                const response = await posts.dislike(this.post.id);
-                if (response.status === 200) {
-                    this.likes = response.data.likes_count;
-                    this.dislikes = response.data.dislikes_count;
-                }
-                else ElMessage.error('Error liking post');
-            } catch (error) {
-                if (error.response.status === 409) {
-                    const response = await posts.undislike(this.id);
-                    if (response.status === 200) {
-                        this.likes = response.data.likes_count;
-                        this.dislikes = response.data.dislikes_count;
-                    }
-                    else ElMessage.error('Error liking post');
-                }
-                else ElMessage.error('Error liking post');
+            const response = await posts.dislike(this.post.id);
+            if (response.status === 200) {
+                this.$emit('updatePost', response.data);
             }
+            else ElMessage.error('Error disliking post');
+        },
+        async undislike() {
+            const response = await posts.undislike(this.post.id);
+            if (response.status === 200) {
+                this.$emit('updatePost', response.data);
+            }
+            else ElMessage.error('Error undisliking post');
         },
         async boost() {
-            try{
-                const response = await posts.boost(this.post.id);
-                if (response.status === 200) {
-                    this.boosts = response.data.boosts_count;
-                }
-                else ElMessage.error('Error liking post');
-            } catch (error) {
-                if (error.response.status === 409) {
-                    const response = await posts.unboost(this.id);
-                    if (response.status === 200) {
-                        this.boosts = response.data.boosts_count;
-                    }
-                    else ElMessage.error('Error liking post');
-                }
-                else ElMessage.error('Error liking post');
+            const response = await posts.boost(this.post.id);
+            if (response.status === 200) {
+                this.$emit('updatePost', response.data);
             }
+            else ElMessage.error('Error boosting post');
+        },
+        async unboost() {
+            const response = await posts.unboost(this.post.id);
+            if (response.status === 200) {
+                this.$emit('updatePost', response.data);
+            }
+            else ElMessage.error('Error unboosting post');
         },
         async goToUser() {
             this.$router.push({ name: 'User', params: { user_id: this.post.user_id } });
         },
         async goToMagazine() {
             this.$router.push({ name: 'Magazine', params: { magazine_id: this.post.magazine_id } });
+        },
+        async goToPost() {
+            this.$router.push({ name: 'Post', params: { post_id: this.post.id } });
         }
     },
-    async mounted() {
-        await this.getPost()
-    }
 }
 </script>
+
+<style scoped>
+.el-text {
+    font-family: 'Your Font', sans-serif; /* Replace 'Your Font' with the name of your font */
+}
+</style>

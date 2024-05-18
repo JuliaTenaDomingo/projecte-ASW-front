@@ -1,5 +1,7 @@
 <template>
-  <el-card class="box-card" shadow="hover" style="margin: 10px 0;">
+  <el-alert v-if="apiKey === '' || apiKey === null" title="You need to set an API key to use this application" type="error" show-icon></el-alert>
+  <div v-else>
+  <el-card class="box-card" shadow="hover" style="margin: 10px 0;" :body-style="{ background: '#f9fafb' }">
     <el-row>
       <el-col :span="12">
         <el-button :type="sort === 'top' ? 'primary' : 'text'" @click="sort = 'top'; getPosts()">Top</el-button>
@@ -13,13 +15,14 @@
       </el-col>
     </el-row>
   </el-card>
-
-  <PostComponent v-for="post in posts" :key="post.id" :post="post"></PostComponent>
+  <PostComponent v-for="post in posts" :key="post.id" :post="post" @updatePost="updatePost"></PostComponent>
+</div>
 </template>
 
 <script>
 import PostComponent from '@/components/PostComponent.vue'
 import posts from '@/services/posts';
+import {ElLoading} from "element-plus";
 
 export default {
   name: 'Posts',
@@ -30,16 +33,28 @@ export default {
     return {
       posts: [],
       filter: 'all',
-      sort: 'top'
+      sort: 'top',
+      apiKey: localStorage.getItem('apiKey')
     }
   },
   methods: {
     async getPosts() {
+      if (this.apiKey === '' || this.apiKey === null) {
+        return;
+      }
+      const loadingFS = ElLoading.service({ fullscreen: true, text: 'Loading', background: 'rgba(255,255,255,0.7)' })
       const response = await posts.list(this.filter, this.sort);
       if (response.status === 200) {
         this.posts = response.data;
       }
-    }
+      loadingFS.close();
+    },
+    async updatePost(newPost) {
+        const index = this.posts.findIndex(post => post.id === newPost.id);
+        if (index !== -1) {
+            this.posts[index] = newPost;
+        }
+    },
   },
   async mounted() {
     await this.getPosts()
