@@ -20,7 +20,7 @@ export default {
         return await axios.post(`/posts/${postId}/dislike`)
     },
     async undislike(postId) {
-        return await axios.delete(`/posts/${postId}/undislike`)
+        return await axios.delete(`/posts/${postId}/dislike`)
     },
     async boost(postId) {
         return await axios.post(`/posts/${postId}/boost`)

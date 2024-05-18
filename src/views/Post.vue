@@ -1,7 +1,7 @@
 <template>
   <PostComponent
     :key="post.id"
-    :post="post" ></PostComponent>
+    :post="post" @updatePost="updatePost"></PostComponent>
 
 </template>
 
@@ -25,7 +25,12 @@ export default {
       if (response.status === 200) {
         this.post = response.data;
       }
-    }
+    },
+    async updatePost(newPost) {
+      if (this.post.id === newPost.id) {
+        this.post = newPost;
+      }
+    },
   },
   async mounted() {
     await this.getPost()
