@@ -4,14 +4,14 @@
             <el-col :xl="1" :lg="2" :md="2" :sm="3" :xs="3">
                 <el-row>
                     <el-col>
-                        <el-button v-if="!post.current_user_likes" @click="like()" size="large"><el-icon><Top /></el-icon> {{ post.likes_count }}</el-button>
+                        <el-button v-if="!post.current_user_likes" @click="like()" style="color:#409EFF" size="large"><el-icon><Top /></el-icon> {{ post.likes_count }}</el-button>
                         <el-button v-else @click="unlike()" type="primary" size="large"><el-icon><Top /></el-icon> {{ post.likes_count }}</el-button>
                     </el-col>
                 </el-row>
                 <br>
                 <el-row>
                     <el-col>
-                        <el-button v-if="!post.current_user_dislikes" @click="dislike()" size="large"><el-icon><Bottom /> </el-icon> {{ post.dislikes_count }}</el-button>
+                        <el-button v-if="!post.current_user_dislikes" @click="dislike()" style="color:#409EFF" size="large"><el-icon><Bottom /> </el-icon> {{ post.dislikes_count }}</el-button>
                         <el-button v-else @click="undislike()" type="primary" size="large"><el-icon><Bottom /> </el-icon> {{ post.dislikes_count }}</el-button>
                     </el-col>
                 </el-row>
@@ -19,21 +19,21 @@
             <el-col :xl="23" :lg="22" :md="22" :sm="21" :xs="21">
                 <el-row style="margin-bottom: 5px; height: 30px;">
                     <el-col>
-                        <el-button type="text" @click="goToPost" style="font-size: large;">{{ post.title }}</el-button>
-                        <el-text type="primary" style="margin-left:10px"><a :href="formatUrl(post.url)" target="_blank">{{ post.url }}</a></el-text>                   
+                        <el-button :link="true" @click="goToPost" style="color:#409EFF; font-size: large; font-weight: bold; margin-right:10px">{{ post.title }}</el-button>
+                        <a :href="formatUrl(post.url)" target="_blank">({{ post.url }})</a>
                     </el-col>
                 </el-row>
                 <el-row style="margin-bottom: 30px; height: 15px;">
                     <el-col >
-                        <el-button type="text" @click="goToUser()" >{{ post.user_name }}</el-button>
+                        <el-button style="color:#409EFF" :link="true" @click="goToUser()" >{{ post.user_name }}</el-button>
                         <el-text>, {{ timeAgo(post.created_at) }} to </el-text>
-                        <el-button type="text" @click="goToMagazine()">{{ post.magazine_name }}</el-button>
+                        <el-button style="color:#409EFF" :link="true" @click="goToMagazine()">{{ post.magazine_name }}</el-button>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col >
-                        <el-button type="text" @click="goToPost" size="small" style="margin-left:-10px">{{ post.comments_count }} comments</el-button>
-                        <el-button v-if="!post.current_user_boosts" @click="boost()" size="small" style="margin-left: 10px;">boost ({{ post.boosts_count }})</el-button>
+                        <el-button :link="true" style="color:#409EFF" @click="goToPost" size="small" >{{ post.comments_count }} comments</el-button>
+                        <el-button v-if="!post.current_user_boosts" @click="boost()" size="small" style="color:#409EFF; margin-left: 10px;">boost ({{ post.boosts_count }})</el-button>
                         <el-button v-else @click="unboost()" size="small" type="primary" style="margin-left: 10px;">unboost ({{ post.boosts_count }})</el-button>
                     </el-col>
                 </el-row>
@@ -123,5 +123,10 @@ export default {
 <style scoped>
 .el-text {
     font-family: 'Your Font', sans-serif; /* Replace 'Your Font' with the name of your font */
+}
+a {
+    color: #409EFF;
+    font-family: 'Your Font', sans-serif;
+    font-size: small;
 }
 </style>

@@ -18,7 +18,7 @@
             <el-menu-item index="5-2"><el-text>Alba API</el-text></el-menu-item>
             <el-menu-item index="5-3"><el-text>Júlia API</el-text></el-menu-item>
             <el-menu-item index="5-3"><el-text>Agus API</el-text></el-menu-item>
-            <el-input v-model="inputApiKey" @keyup.enter="setApiKey" placeholder="Please input your API key"></el-input>
+            <el-input v-model="inputApiKey" style="padding-left: 10px;padding-right: 10px;" @keyup.enter="setApiKey" placeholder="Please input your API key"></el-input>
         </el-sub-menu>
     </el-menu>
 </template>
@@ -43,7 +43,7 @@ export default {
             } else if (key === '2') {
                 this.$router.push({ name: 'Magazines' });
             } else if (key === '3') {
-                this.$router.push({ name: 'Profile' });
+                this.$router.push({ name: 'User' });
             } else if (key === '4-1') {
                 this.$router.push({ name: 'NewThread' });
             } else if (key === '4-2') {
