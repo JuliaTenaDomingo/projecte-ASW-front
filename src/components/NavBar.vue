@@ -1,14 +1,25 @@
 <template>
-    <el-menu :default-active="activeIndex" :ellipsis="false" background-color="#409EFF" text-color="#fff"
+    <el-menu :default-active="activeIndex" :ellipsis="false" background-color="#0f0142" text-color="#fff"
         active-text-color="#fff" class="el-menu-demo" mode="horizontal" @select="handleSelect">
         <el-menu-item index="0">
         <h2 style="color: white;">Tuiter</h2>
         </el-menu-item>
-        
+
+        <div class="flex-grow" />
+
         <el-menu-item index="1">Posts</el-menu-item>
         <el-menu-item index="2">Magazines</el-menu-item>
-        <el-menu-item index="3">Profile</el-menu-item>
+
         <div class="flex-grow" />
+
+        <el-menu-item index="6">
+          <template #title>
+            <el-icon>
+              <Search />
+            </el-icon>
+          </template>
+        </el-menu-item>
+
         <el-sub-menu index="4">
             <template #title><el-icon>
                     <Plus />
@@ -17,13 +28,16 @@
             <el-menu-item index="4-2">New Link</el-menu-item>
             <el-menu-item index="4-3">New Magazine</el-menu-item>
         </el-sub-menu>
+
+        <el-menu-item index="3">Profile</el-menu-item>
+
         <el-sub-menu index="5">
-            <template #title>API Keys</template>
-            <el-menu-item index="5-1">Miquel API</el-menu-item>
-            <el-menu-item index="5-2">Alba API</el-menu-item>
-            <el-menu-item index="5-3">Júlia API</el-menu-item>
-            <el-menu-item index="5-3">Agus API</el-menu-item>
-            <el-input v-model="inputApiKey" style="padding-left: 10px;padding-right: 10px;" @keyup.enter="setApiKey" placeholder="Please input your API key"></el-input>
+          <template #title>API Keys</template>
+          <el-menu-item index="5-1">Miquel API</el-menu-item>
+          <el-menu-item index="5-2">Alba API</el-menu-item>
+          <el-menu-item index="5-3">Júlia API</el-menu-item>
+          <el-menu-item index="5-3">Agus API</el-menu-item>
+          <el-input v-model="inputApiKey" style="padding-left: 10px;padding-right: 10px;" @keyup.enter="setApiKey" placeholder="Please input your API key"></el-input>
         </el-sub-menu>
     </el-menu>
 </template>
@@ -56,7 +70,7 @@ export default {
         handleSelect(key, keyPath) {
             console.log(key, keyPath);
             this.activeIndex = key;
-            if (key === '1') {
+            if (key === '1' || key === '0' || key === '6') {
                 this.$router.push({ name: 'Posts' });
             } else if (key === '2') {
                 this.$router.push({ name: 'Magazines' });
@@ -75,7 +89,7 @@ export default {
                 localStorage.setItem('apiKey', "");
                 location.reload();
             } else if (key === '5-3') {
-                localStorage.setItem('apiKey', "");
+                localStorage.setItem('apiKey', "db7ca1295463c5d39665376651ebdae4");
                 location.reload();
             } else if (key === '5-4') {
                 localStorage.setItem('apiKey', "");
@@ -97,4 +111,5 @@ export default {
 h2 {
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
 </style>
