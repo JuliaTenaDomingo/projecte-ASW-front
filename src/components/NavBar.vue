@@ -1,9 +1,14 @@
 <template>
     <el-menu :default-active="activeIndex" :ellipsis="false" background-color="#409EFF" text-color="#fff"
-        active-text-color="#fff" class="el-menu-demo centered-menu" mode="horizontal" @select="handleSelect">
+        active-text-color="#fff" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+        <el-menu-item index="0">
+        <h2 style="color: white;">Tuiter</h2>
+        </el-menu-item>
+        
         <el-menu-item index="1">Posts</el-menu-item>
         <el-menu-item index="2">Magazines</el-menu-item>
         <el-menu-item index="3">Profile</el-menu-item>
+        <div class="flex-grow" />
         <el-sub-menu index="4">
             <template #title><el-icon>
                     <Plus />
@@ -86,13 +91,10 @@ export default {
 </script>
 
 <style scoped>
-.centered-menu {
-    display: flex;
-    justify-content: center;
+.flex-grow {
+  flex-grow: 1;
 }
-
-.el-text {
-    color: white;
-    /* Replace 'Your Font' with the name of your font */
+h2 {
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 </style>
