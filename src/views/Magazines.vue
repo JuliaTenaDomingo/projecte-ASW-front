@@ -1,10 +1,22 @@
 <template>
-  <el-card class="box-card" shadow="hover" style="margin: 10px 0;" :body-style="{ background: '#dbe9ff' }">
+  <el-card class="box-card" shadow="hover" style="margin: 10px 0;" :body-style="{ background: '#409EFF' }">
     <el-row>
       <el-col :span="12">
-        <el-button :type="sort === 'posts' ? 'primary' : 'default'" @click="sort = 'posts'; getMagazines()">Posts</el-button>
-        <el-button :type="sort === 'comments' ? 'primary' : 'default'" @click="sort = 'comments'; getMagazines()">Comments</el-button>
-        <el-button :type="sort === 'subscriptions' ? 'primary' : 'default'" @click="sort = 'subscriptions'; getMagazines()">Subscriptions</el-button>
+        <el-button 
+          class="custom-button" 
+          :class="{ 'selected-button': sort === 'posts' }" 
+          @click="sort = 'posts'; getMagazines()"
+        >Posts</el-button>
+        <el-button 
+          class="custom-button" 
+          :class="{ 'selected-button': sort === 'comments' }" 
+          @click="sort = 'comments'; getMagazines()"
+        >Comments</el-button>
+        <el-button 
+          class="custom-button" 
+          :class="{ 'selected-button': sort === 'subscriptions' }" 
+          @click="sort = 'subscriptions'; getMagazines()"
+        >Subscriptions</el-button>
       </el-col>
     </el-row>
   </el-card>
@@ -50,3 +62,15 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.custom-button {
+  background-color: transparent;
+  color: white;
+  border: none;
+}
+.selected-button {
+  background-color: white;
+  color: #409EFF;
+}
+</style>

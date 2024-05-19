@@ -1,10 +1,7 @@
 <template>
     <el-menu :default-active="activeIndex" :ellipsis="false" background-color="#409EFF" text-color="#fff"
         active-text-color="#fff" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-        <el-menu-item index="0">
-        <h2 style="color: white;">Tuiter</h2>
-        </el-menu-item>
-        
+        <h2 style="color: white; margin: 15px 20px 20px 20px;">Tuiter</h2>
         <el-menu-item index="1">Posts</el-menu-item>
         <el-menu-item index="2">Magazines</el-menu-item>
         <el-menu-item index="3">Profile</el-menu-item>
@@ -96,5 +93,9 @@ export default {
 }
 h2 {
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.el-menu-item {
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
 }
 </style>

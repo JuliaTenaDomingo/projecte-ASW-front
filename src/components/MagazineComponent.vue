@@ -1,5 +1,5 @@
 <template>
-    <el-card class="box-card" shadow="hover" style="margin: 10px 0;" :body-style="{ background: '#f9fafb' }">
+    <el-card class="box-card" shadow="hover" style="margin: 20px;" :body-style="{ background: '#dbe9ff' }">
         <el-row type="flex" align="middle">
             <el-col :xl="1" :lg="2" :md="2" :sm="3" :xs="4">
                 <el-row>
@@ -9,7 +9,7 @@
                     </el-col>
                 </el-row>
             </el-col>
-            <el-col :xl="23" :lg="22" :md="22" :sm="21" :xs="20">
+            <el-col :xl="23" :lg="22" :md="22" :sm="21" :xs="20" style="padding-left:10px">
                 <el-row style="margin-bottom: 5px; height: 30px;">
                     <el-col>
                         <el-button :link="true" @click="goToMagazine" style="font-size: large; font-weight: bold; margin-right:10px; color:#409EFF">{{ magazine.name }}</el-button>

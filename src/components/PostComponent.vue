@@ -1,7 +1,7 @@
 <template>
-    <el-card class="box-card" shadow="hover" style="margin: 10px 0;" :body-style="{ background: backgroundColor }">
+    <el-card class="box-card" shadow="hover" style="margin: 20px;" :body-style="{ background: '#dbe9ff' }">
         <el-row type="flex" align="middle">
-            <el-col :xl="1" :lg="2" :md="2" :sm="3" :xs="3">
+            <el-col :xl="1" :lg="2" :md="2" :sm="3" :xs="4">
                 <el-row>
                     <el-col>
                         <el-button v-if="!post.current_user_likes" @click="like()" style="color:#409EFF" size="large"><el-icon><Top /></el-icon> {{ post.likes_count }}</el-button>
@@ -16,7 +16,7 @@
                     </el-col>
                 </el-row>
             </el-col>
-            <el-col :xl="23" :lg="22" :md="22" :sm="21" :xs="21">
+            <el-col :xl="23" :lg="22" :md="22" :sm="21" :xs="20">
                 <el-row style="margin-bottom: 5px; height: 30px;">
                     <el-col>
                         <el-button :link="true" @click="goToPost" style="color:#409EFF; font-size: large; font-weight: bold; margin-right:10px">{{ post.title }}</el-button>
@@ -55,7 +55,6 @@ export default {
             type: Object,
             required: true
         },
-        backgroundColor: {type: String, default: '#f9fafb'}
     },
     methods: {
         timeAgo(date) {
