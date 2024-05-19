@@ -32,7 +32,7 @@ export default {
     PostComponent
   },
   props: {
-    magazine_id: String, default: ''
+    magazine_id: String, default: '', required: false
   },
   data() {
     return {

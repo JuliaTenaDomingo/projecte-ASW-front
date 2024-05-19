@@ -1,6 +1,6 @@
 <template>
     <MagazineComponentExtended :magazine="magazine" @updateMagazine="updateMagazine" />
-    <Posts/>
+    <Posts :magazine_id="$route.params.magazine_id"/>
 </template>
 
 <script>
