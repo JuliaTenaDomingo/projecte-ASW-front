@@ -1,7 +1,8 @@
 <template>
   <div id="app">
-    <NavBar/>    
-    <router-view/>
+    <NavBar/>
+    <el-alert v-if="apiKey === '' || apiKey === null" title="You need to set an API key to use this application" type="error" show-icon></el-alert>
+    <router-view v-else></router-view>
   </div>
 </template>
 
@@ -13,6 +14,11 @@ export default {
   name: 'App',
   components: {
     NavBar
+  },
+  data() {
+    return {
+      apiKey: localStorage.getItem('apiKey')
+    }
   }
 }
 </script>

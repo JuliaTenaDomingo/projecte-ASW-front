@@ -1,7 +1,7 @@
 <template>
   <PostComponent
     :key="post.id"
-    :post="post" @updatePost="updatePost"></PostComponent>
+    :post="post" :backgroundColor="'#dbe9ff'" @updatePost="updatePost" ></PostComponent>
 
 </template>
 

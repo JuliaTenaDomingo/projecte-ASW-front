@@ -1,5 +1,5 @@
 <template>
-    <el-card class="box-card" shadow="hover" style="margin: 10px 0;" :body-style="{ background: '#f9fafb' }">
+    <el-card class="box-card" shadow="hover" style="margin: 10px 0;" :body-style="{ background: backgroundColor }">
         <el-row type="flex" align="middle">
             <el-col :xl="1" :lg="2" :md="2" :sm="3" :xs="3">
                 <el-row>
@@ -55,6 +55,7 @@ export default {
             type: Object,
             required: true
         },
+        backgroundColor: {type: String, default: '#f9fafb'}
     },
     methods: {
         timeAgo(date) {

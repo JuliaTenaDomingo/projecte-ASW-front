@@ -1,5 +1,6 @@
 <template>
     <MagazineComponentExtended :magazine="magazine" @updateMagazine="updateMagazine" />
+    <br>
     <Posts :magazine_id="$route.params.magazine_id"/>
 </template>
 
@@ -33,7 +34,6 @@ export default {
   },
   async mounted() {
     await this.getMagazine();
-    await this.getMagazinePosts();
   }
 }
 </script>

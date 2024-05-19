@@ -1,7 +1,5 @@
 <template>
-  <el-alert v-if="apiKey === '' || apiKey === null" title="You need to set an API key to use this application" type="error" show-icon></el-alert>
-  <div v-else>
-  <el-card class="box-card" shadow="hover" style="margin: 10px 0;" :body-style="{ background: '#f9fafb' }">
+  <el-card class="box-card" shadow="hover" style="margin: 10px 0;" :body-style="{ background: '#dbe9ff' }">
     <el-row>
       <el-col :span="12">
         <el-button :type="sort === 'top' ? 'primary' : 'default'" @click="sort = 'top'; getPosts()">Top</el-button>
@@ -16,7 +14,6 @@
     </el-row>
   </el-card>
   <PostComponent v-for="post in posts" :key="post.id" :post="post" @updatePost="updatePost"></PostComponent>
-</div>
 </template>
 
 <script>
@@ -39,14 +36,10 @@ export default {
       posts: [],
       filter: 'all',
       sort: 'top',
-      apiKey: localStorage.getItem('apiKey')
     }
   },
   methods: {
     async getPosts() {
-      if (this.apiKey === '' || this.apiKey === null) {
-        return;
-      }
       const loadingFS = ElLoading.service({ fullscreen: true, text: 'Loading', background: 'rgba(255,255,255,0.7)' });
       let response = "";
       if (this.magazine_id === '' || this.magazine_id === undefined) response = await posts.list(this.filter, this.sort);
