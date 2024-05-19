@@ -20,7 +20,7 @@
                 <el-row style="margin-bottom: 5px; height: 30px;">
                     <el-col>
                         <el-button :link="true" @click="goToPost" style="color:#409EFF; font-size: large; font-weight: bold; margin-right:10px">{{ post.title }}</el-button>
-                        <a :href="formatUrl(post.url)" target="_blank">({{ post.url }})</a>
+                        <a v-if=post.url :href="formatUrl(post.url)" target="_blank">({{ post.url }})</a>
                     </el-col>
                 </el-row>
                 <el-row style="margin-bottom: 30px; height: 15px;">
