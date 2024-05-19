@@ -1,23 +1,23 @@
 <template>
     <el-menu :default-active="activeIndex" :ellipsis="false" background-color="#409EFF" text-color="#fff"
         active-text-color="#fff" class="el-menu-demo centered-menu" mode="horizontal" @select="handleSelect">
-        <el-menu-item index="1"><el-text>Posts</el-text></el-menu-item>
-        <el-menu-item index="2"><el-text>Magazines</el-text></el-menu-item>
-        <el-menu-item index="3"><el-text>Profile</el-text></el-menu-item>
+        <el-menu-item index="1">Posts</el-menu-item>
+        <el-menu-item index="2">Magazines</el-menu-item>
+        <el-menu-item index="3">Profile</el-menu-item>
         <el-sub-menu index="4">
             <template #title><el-icon>
                     <Plus />
                 </el-icon></template>
-            <el-menu-item index="4-1"><el-text>New Thread</el-text></el-menu-item>
-            <el-menu-item index="4-2"><el-text>New Link</el-text></el-menu-item>
-            <el-menu-item index="4-3"><el-text>New Magazine</el-text></el-menu-item>
+            <el-menu-item index="4-1">New Thread</el-menu-item>
+            <el-menu-item index="4-2">New Link</el-menu-item>
+            <el-menu-item index="4-3">New Magazine</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="5">
-            <template #title><el-text>API Keys</el-text></template>
-            <el-menu-item index="5-1"><el-text>Miquel API</el-text></el-menu-item>
-            <el-menu-item index="5-2"><el-text>Alba API</el-text></el-menu-item>
-            <el-menu-item index="5-3"><el-text>Júlia API</el-text></el-menu-item>
-            <el-menu-item index="5-3"><el-text>Agus API</el-text></el-menu-item>
+            <template #title>API Keys</template>
+            <el-menu-item index="5-1">Miquel API</el-menu-item>
+            <el-menu-item index="5-2">Alba API</el-menu-item>
+            <el-menu-item index="5-3">Júlia API</el-menu-item>
+            <el-menu-item index="5-3">Agus API</el-menu-item>
             <el-input v-model="inputApiKey" style="padding-left: 10px;padding-right: 10px;" @keyup.enter="setApiKey" placeholder="Please input your API key"></el-input>
         </el-sub-menu>
     </el-menu>
@@ -25,12 +25,25 @@
 
 <script>
 import 'element-plus/theme-chalk/index.css'
+import { useRoute } from 'vue-router';
+import { computed } from 'vue';
 
 export default {
     name: 'NavBar',
+    setup() {
+        const route = useRoute();
+        const activeIndex = computed(() => {
+            switch (route.path) {
+                case '/posts': return '1';
+                case '/magazines': return '2';
+                case '/profile': return '3';
+                default: return '1';
+            }
+        });
+        return { activeIndex };
+    },
     data() {
         return {
-            activeIndex: '1',
             inputApiKey: ''
         };
     },
@@ -80,7 +93,6 @@ export default {
 
 .el-text {
     color: white;
-    font-family: 'Your Font', sans-serif;
     /* Replace 'Your Font' with the name of your font */
 }
 </style>

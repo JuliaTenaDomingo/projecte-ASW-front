@@ -21,5 +21,8 @@ export default {
     },
     async unsubscribe(id) {
         return await axios.delete(`/magazines/${id}/unsubscribe`)
+    },
+    async posts(id, type, sort) {
+        return await axios.get(`/magazines/${id}/posts?sort=${sort}&type=${type}`)
     }
 }

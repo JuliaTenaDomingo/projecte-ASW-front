@@ -35,6 +35,7 @@
                         <el-button :link="true" style="color:#409EFF" @click="goToPost" size="small" >{{ post.comments_count }} comments</el-button>
                         <el-button v-if="!post.current_user_boosts" @click="boost()" size="small" style="color:#409EFF; margin-left: 10px;">boost ({{ post.boosts_count }})</el-button>
                         <el-button v-else @click="unboost()" size="small" type="primary" style="margin-left: 10px;">unboost ({{ post.boosts_count }})</el-button>
+                        <el-button v-if="post.current_user_owns" @click="edit()" size="small" style="color:#409EFF; margin-left: 10px;">edit</el-button>
                     </el-col>
                 </el-row>
             </el-col>  
@@ -69,6 +70,7 @@ export default {
             const response = await posts.like(this.post.id);
             if (response.status === 200) {
                 this.$emit('updatePost', response.data);
+                ElMessage.success('Post successfully liked');
             }
             else ElMessage.error('Error liking post');
         },
@@ -76,6 +78,7 @@ export default {
             const response = await posts.unlike(this.post.id);
             if (response.status === 200) {
                 this.$emit('updatePost', response.data);
+                ElMessage.success('Post successfully unliked');
             }
             else ElMessage.error('Error unliking post');
         },
@@ -83,6 +86,7 @@ export default {
             const response = await posts.dislike(this.post.id);
             if (response.status === 200) {
                 this.$emit('updatePost', response.data);
+                ElMessage.success('Post successfully disliked');
             }
             else ElMessage.error('Error disliking post');
         },
@@ -90,6 +94,7 @@ export default {
             const response = await posts.undislike(this.post.id);
             if (response.status === 200) {
                 this.$emit('updatePost', response.data);
+                ElMessage.success('Post successfully undisliked');
             }
             else ElMessage.error('Error undisliking post');
         },
@@ -97,6 +102,7 @@ export default {
             const response = await posts.boost(this.post.id);
             if (response.status === 200) {
                 this.$emit('updatePost', response.data);
+                ElMessage.success('Post successfully boosted');
             }
             else ElMessage.error('Error boosting post');
         },
@@ -104,6 +110,7 @@ export default {
             const response = await posts.unboost(this.post.id);
             if (response.status === 200) {
                 this.$emit('updatePost', response.data);
+                ElMessage.success('Post successfully unboosted');
             }
             else ElMessage.error('Error unboosting post');
         },
@@ -115,18 +122,17 @@ export default {
         },
         async goToPost() {
             this.$router.push({ name: 'Post', params: { post_id: this.post.id } });
+        },
+        async edit() {
+            this.$router.push({ name: 'EditPost', params: { post_id: this.post.id } });
         }
     },
 }
 </script>
 
 <style scoped>
-.el-text {
-    font-family: 'Your Font', sans-serif; /* Replace 'Your Font' with the name of your font */
-}
 a {
     color: #409EFF;
-    font-family: 'Your Font', sans-serif;
     font-size: small;
 }
 </style>

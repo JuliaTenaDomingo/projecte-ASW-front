@@ -29,6 +29,8 @@
 
 <script>
 import magazine from '@/services/magazines';
+import { ElMessage } from 'element-plus'; // for Vue 3
+
 export default {
     name: 'MagazineComponent',
     props: {
@@ -42,15 +44,17 @@ export default {
             const response = await magazine.subscribe(this.magazine.id);
             if (response.status === 200) {
                 this.$emit('updateMagazine', response.data);
+                ElMessage.success('Successfully subscribed');
             }
-            else ElMessage.error('Error liking post');
+            else ElMessage.error('Error subscribing to magazine');
         },
         async unsubscribe() {
             const response = await magazine.unsubscribe(this.magazine.id);
             if (response.status === 200) {
                 this.$emit('updateMagazine', response.data);
+                ElMessage.success('Successfully unsubscribed');
             }
-            else ElMessage.error('Error liking post');
+            else ElMessage.error('Error unsubscribing to magazine');
         },
         async goToMagazine() {
             this.$router.push({ name: 'Magazine', params: { magazine_id: this.magazine.id } });
@@ -58,9 +62,3 @@ export default {
     },
 }
 </script>
-
-<style scoped>
-.el-text {
-    font-family: 'Your Font', sans-serif; /* Replace 'Your Font' with the name of your font */
-}
-</style>
