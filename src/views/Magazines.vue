@@ -18,6 +18,7 @@
 import MagazineComponent from '@/components/MagazineComponent.vue'
 import magazines from '@/services/magazines';
 import {ElLoading} from "element-plus";
+import { ElMessage } from 'element-plus'; // for Vue 3
 
 export default {
   name: 'Magazines',
@@ -41,9 +42,10 @@ export default {
       if (response.status === 200) {
         this.magazines = response.data;
       }
+      else ElMessage.error('Error retrieving magazines');
       loadingFS.close();
     },
-    async updateMagazine(newMagazine) {
+    updateMagazine(newMagazine) {
         const index = this.magazines.findIndex(magazine => magazine.id === newMagazine.id);
         if (index !== -1) {
             this.magazines[index] = newMagazine;

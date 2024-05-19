@@ -22,12 +22,17 @@
 <script>
 import PostComponent from '@/components/PostComponent.vue'
 import posts from '@/services/posts';
+import magazine from '@/services/magazines';
 import {ElLoading} from "element-plus";
+import { ElMessage } from 'element-plus'; // for Vue 3
 
 export default {
   name: 'Posts',
   components: {
     PostComponent
+  },
+  props: {
+    magazine_id: String, default: ''
   },
   data() {
     return {
@@ -42,11 +47,14 @@ export default {
       if (this.apiKey === '' || this.apiKey === null) {
         return;
       }
-      const loadingFS = ElLoading.service({ fullscreen: true, text: 'Loading', background: 'rgba(255,255,255,0.7)' })
-      const response = await posts.list(this.filter, this.sort);
+      const loadingFS = ElLoading.service({ fullscreen: true, text: 'Loading', background: 'rgba(255,255,255,0.7)' });
+      let response = "";
+      if (this.magazine_id === '' || this.magazine_id === undefined) response = await posts.list(this.filter, this.sort);
+      else response = await magazine.posts(this.magazine_id, this.filter, this.sort);
       if (response.status === 200) {
         this.posts = response.data;
       }
+      else ElMessage.error('Error retrieving posts');
       loadingFS.close();
     },
     async updatePost(newPost) {
