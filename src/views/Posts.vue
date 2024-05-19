@@ -4,14 +4,14 @@
   <el-card class="box-card" shadow="hover" style="margin: 10px 0;" :body-style="{ background: '#f9fafb' }">
     <el-row>
       <el-col :span="12">
-        <el-button :type="sort === 'top' ? 'primary' : 'text'" @click="sort = 'top'; getPosts()">Top</el-button>
-        <el-button :type="sort === 'newest' ? 'primary' : 'text'" @click="sort = 'newest'; getPosts()">Newest</el-button>
-        <el-button :type="sort === 'commented' ? 'primary' : 'text'" @click="sort = 'commented'; getPosts()">Commented</el-button>
+        <el-button :type="sort === 'top' ? 'primary' : 'default'" @click="sort = 'top'; getPosts()">Top</el-button>
+        <el-button :type="sort === 'newest' ? 'primary' : 'default'" @click="sort = 'newest'; getPosts()">Newest</el-button>
+        <el-button :type="sort === 'commented' ? 'primary' : 'default'" @click="sort = 'commented'; getPosts()">Commented</el-button>
       </el-col>
       <el-col :span="12" style="text-align: right;">
-        <el-button :type="filter === 'all' ? 'primary' : 'text'" @click="filter = 'all'; getPosts()">All</el-button>
-        <el-button :type="filter === 'links' ? 'primary' : 'text'" @click="filter = 'links'; getPosts()">Links</el-button>
-        <el-button :type="filter === 'threads' ? 'primary' : 'text'" @click="filter = 'threads'; getPosts()">Threads</el-button>
+        <el-button :type="filter === 'all' ? 'primary' : 'default'" @click="filter = 'all'; getPosts()">All</el-button>
+        <el-button :type="filter === 'links' ? 'primary' : 'default'" @click="filter = 'links'; getPosts()">Links</el-button>
+        <el-button :type="filter === 'threads' ? 'primary' : 'default'" @click="filter = 'threads'; getPosts()">Threads</el-button>
       </el-col>
     </el-row>
   </el-card>
