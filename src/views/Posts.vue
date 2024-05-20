@@ -1,7 +1,7 @@
 <template>
-  <el-card class="box-card" shadow="hover" style="margin: 10px 0;" :style="{ background: '#409EFF' }">
+  <el-card class="box-card" shadow="hover" style="margin: 20px; height: 50px;" :style="{ background: '#409EFF' }">
     <el-row>
-      <el-col :span="12">
+      <el-col :span="12" style="margin: -10px 0;">
         <el-button 
           class="custom-button" 
           :class="{ 'selected-button': sort === 'top' }" 
@@ -18,7 +18,7 @@
           @click="sort = 'commented'; getPosts()"
         >Commented</el-button>
       </el-col>
-      <el-col :span="12" style="text-align: right;">
+      <el-col :span="12" style="text-align: right;margin: -10px 0;">
         <el-button 
           class="custom-button" 
           :class="{ 'selected-button': filter === 'all' }" 
@@ -37,7 +37,7 @@
       </el-col>
     </el-row>
   </el-card>
-  <PostComponent v-for="post in posts" :key="post.id" :post="post" @updatePost="updatePost"></PostComponent>
+  <PostComponent v-for="post in posts" :key="post.id" :post="post" @updatePost="updatePost" @deletePost="deletePost"></PostComponent>
 </template>
 
 <script>
@@ -79,6 +79,9 @@ export default {
         if (index !== -1) {
             this.posts[index] = newPost;
         }
+    },
+    async deletePost() {
+      await this.getPosts();
     },
   },
   async mounted() {

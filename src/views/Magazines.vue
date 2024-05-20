@@ -1,7 +1,7 @@
 <template>
-  <el-card class="box-card" shadow="hover" style="margin: 10px 0;" :body-style="{ background: '#409EFF' }">
+  <el-card class="box-card" shadow="hover" style="margin: 20px; height: 50px;" :body-style="{ background: '#409EFF' }">
     <el-row>
-      <el-col :span="12">
+      <el-col :span="12" style="margin: -10px 0;">
         <el-button 
           class="custom-button" 
           :class="{ 'selected-button': sort === 'posts' }" 

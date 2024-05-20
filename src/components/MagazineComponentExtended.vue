@@ -1,5 +1,5 @@
 <template>
-    <el-card class="box-card" shadow="hover" style="margin: 10px 0;" :body-style="{ background: '#dbe9ff' }">
+    <el-card class="box-card" shadow="hover" style="margin: 20px" :body-style="{ background: '#dbe9ff' }">
           <el-row type="flex" align="middle">
               <el-col :xl="2" :lg="2" :md="2" :sm="3" :xs="4">
                   <el-row>

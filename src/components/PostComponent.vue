@@ -31,11 +31,12 @@
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-col >
+                    <el-col>
                         <el-button :link="true" style="color:#409EFF" @click="goToPost" size="small" >{{ post.comments_count }} comments</el-button>
                         <el-button v-if="!post.current_user_boosts" @click="boost()" size="small" style="color:#409EFF; margin-left: 10px;">boost ({{ post.boosts_count }})</el-button>
                         <el-button v-else @click="unboost()" size="small" type="primary" style="margin-left: 10px;">unboost ({{ post.boosts_count }})</el-button>
-                        <el-button v-if="post.current_user_owns" @click="edit()" size="small" style="color:#409EFF; margin-left: 10px;">edit</el-button>
+                        <el-button  v-if="post.current_user_owns" @click="editPost()" size="small" style="color:#409EFF; margin-left: 10px;">edit</el-button>
+                        <el-button  v-if="post.current_user_owns" @click="deletePost()" size="small" style="color:#409EFF; margin-left: 10px;">delete</el-button>
                     </el-col>
                 </el-row>
             </el-col>  
@@ -123,8 +124,16 @@ export default {
         async goToPost() {
             this.$router.push({ name: 'Post', params: { post_id: this.post.id } });
         },
-        async edit() {
+        async editPost() {
             this.$router.push({ name: 'EditPost', params: { post_id: this.post.id } });
+        },
+        async deletePost() {
+            const response = await posts.delete(this.post.id);
+            if (response.status === 204) {
+                this.$emit('deletePost', response.data);
+                ElMessage.success('Post successfully deleted');
+            }
+            else ElMessage.error('Error deleting post');
         }
     },
 }

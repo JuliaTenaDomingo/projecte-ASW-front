@@ -1,7 +1,7 @@
 <template>
   <PostComponent
     :key="post.id"
-    :post="post" @updatePost="updatePost" ></PostComponent>
+    :post="post" @updatePost="updatePost" @deletePost="deletePost"></PostComponent>
 
 </template>
 
@@ -35,6 +35,9 @@ export default {
         this.post = newPost;
       }
     },
+    async deletePost() {
+      this.$router.push({ name: 'Posts' });
+    }
   },
   async mounted() {
     await this.getPost()
