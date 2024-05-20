@@ -69,7 +69,7 @@ export default {
                 localStorage.setItem('apiKey', "96e76c7a1a99a34386fab31b0e6d7f7d");
                 location.reload();
             } else if (key === '5-2') {
-                localStorage.setItem('apiKey', "");
+                localStorage.setItem('apiKey', "37f6b3d6a803a1db9c83c506b611d26e");
                 location.reload();
             } else if (key === '5-3') {
                 localStorage.setItem('apiKey', "");
