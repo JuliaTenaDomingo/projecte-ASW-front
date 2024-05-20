@@ -1,13 +1,14 @@
 <template>
   <PostComponent
     :key="post.id"
-    :post="post" :backgroundColor="'#dbe9ff'" @updatePost="updatePost" ></PostComponent>
+    :post="post" @updatePost="updatePost" ></PostComponent>
 
 </template>
 
 <script>
 import PostComponent from '../components/PostComponent.vue';
 import posts from '../services/posts';
+import { ElLoading, ElMessage } from 'element-plus';
 
 export default {
   name: 'Post',
@@ -21,10 +22,13 @@ export default {
   },
   methods: {
     async getPost() {
+      const loadingFS = ElLoading.service({ fullscreen: true, text: 'Loading', background: 'rgba(255,255,255,0.7)' })
       const response = await posts.retrieve(this.$route.params.post_id);
       if (response.status === 200) {
         this.post = response.data;
       }
+      else ElMessage.error('Error retrieving post');
+      loadingFS.close();
     },
     async updatePost(newPost) {
       if (this.post.id === newPost.id) {

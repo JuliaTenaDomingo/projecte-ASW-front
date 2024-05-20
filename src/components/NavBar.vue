@@ -111,5 +111,8 @@ export default {
 h2 {
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
+.el-menu-item {
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+}
 </style>

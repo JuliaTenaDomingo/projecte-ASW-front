@@ -1,15 +1,39 @@
 <template>
-  <el-card class="box-card" shadow="hover" style="margin: 10px 0;" :body-style="{ background: '#dbe9ff' }">
+  <el-card class="box-card" shadow="hover" style="margin: 10px 0;" :style="{ background: '#409EFF' }">
     <el-row>
       <el-col :span="12">
-        <el-button :type="sort === 'top' ? 'primary' : 'default'" @click="sort = 'top'; getPosts()">Top</el-button>
-        <el-button :type="sort === 'newest' ? 'primary' : 'default'" @click="sort = 'newest'; getPosts()">Newest</el-button>
-        <el-button :type="sort === 'commented' ? 'primary' : 'default'" @click="sort = 'commented'; getPosts()">Commented</el-button>
+        <el-button 
+          class="custom-button" 
+          :class="{ 'selected-button': sort === 'top' }" 
+          @click="sort = 'top'; getPosts()"
+        >Top</el-button>
+        <el-button 
+          class="custom-button" 
+          :class="{ 'selected-button': sort === 'newest' }" 
+          @click="sort = 'newest'; getPosts()"
+        >Newest</el-button>
+        <el-button 
+          class="custom-button" 
+          :class="{ 'selected-button': sort === 'commented' }" 
+          @click="sort = 'commented'; getPosts()"
+        >Commented</el-button>
       </el-col>
       <el-col :span="12" style="text-align: right;">
-        <el-button :type="filter === 'all' ? 'primary' : 'default'" @click="filter = 'all'; getPosts()">All</el-button>
-        <el-button :type="filter === 'links' ? 'primary' : 'default'" @click="filter = 'links'; getPosts()">Links</el-button>
-        <el-button :type="filter === 'threads' ? 'primary' : 'default'" @click="filter = 'threads'; getPosts()">Threads</el-button>
+        <el-button 
+          class="custom-button" 
+          :class="{ 'selected-button': filter === 'all' }" 
+          @click="filter = 'all'; getPosts()"
+        >All</el-button>
+        <el-button 
+          class="custom-button" 
+          :class="{ 'selected-button': filter === 'links' }" 
+          @click="filter = 'links'; getPosts()"
+        >Links</el-button>
+        <el-button 
+          class="custom-button" 
+          :class="{ 'selected-button': filter === 'threads' }" 
+          @click="filter = 'threads'; getPosts()"
+        >Threads</el-button>
       </el-col>
     </el-row>
   </el-card>
@@ -62,3 +86,15 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.custom-button {
+  background-color: transparent;
+  color: white;
+  border: none;
+}
+.selected-button {
+  background-color: white;
+  color: #409EFF;
+}
+</style>
