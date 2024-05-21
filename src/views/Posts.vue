@@ -58,6 +58,7 @@ import magazine from '@/services/magazines';
 import {ElLoading} from "element-plus";
 import { ElMessage } from 'element-plus'; // for Vue 3
 
+
 export default {
   name: 'Posts',
   components: {
@@ -74,6 +75,7 @@ export default {
       sort: 'top',
     }
   },
+
   methods: {
     async getPosts() {
       const loadingFS = ElLoading.service({ fullscreen: true, text: 'Loading', background: 'rgba(255,255,255,0.7)' });
