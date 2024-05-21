@@ -51,8 +51,10 @@
         v-for="reply in comment.all_replies"
         :key="reply.id"
         :comment="reply"
+        :commentToEdit="commentToEdit"
         @updateComment="updateReply"
         @commentDeleted="deleteReply"
+        @editComment="editComment"
     />
   </div>
 </template>
@@ -92,9 +94,18 @@ export default {
     async edit() {
       this.$emit('editComment', this.comment);
     },
-    async handleUpdateComment(updatedComment) {
+    editComment(comment) {
+      this.$emit('editComment', comment); // Re-emit the editComment event to the parent component
+    },
+    handleUpdateComment(updatedComment) {
       this.$emit('editComment', null);
-      this.$emit('updateComment', updatedComment);
+      if (updatedComment.comment_id === this.comment.id) {
+        // The updated comment is a reply to this comment
+        this.updateReply(updatedComment);
+      } else {
+        // The updated comment is this comment itself
+        this.$emit('updateComment', updatedComment);
+      }
     },
     async deleteComment() {
       const response = await comments.removeComment(this.$route.params.post_id, this.comment.id);

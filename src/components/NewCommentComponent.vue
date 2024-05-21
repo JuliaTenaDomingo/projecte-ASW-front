@@ -34,7 +34,7 @@ export default {
       const postId = this.$route.params.post_id;
       const comment = {
         body: this.newComment,
-        comment_id: null,
+        comment_id: this.commentToEdit && this.commentToEdit.comment_id ? this.commentToEdit.comment_id : null,
       };
       let response;
       if (this.commentId) {

@@ -96,6 +96,7 @@ export default {
       }
     },
     async editComment(comment) {
+      console.log('Editing comment on editComment on POST.vue:', comment);
       this.commentToEdit = comment;
     },
   },
