@@ -19,8 +19,18 @@ const store = createStore({
       const user = state.userIdToDetails[userId];
       if (user) {
         state.selectedUser = { userId, ...user };
+        localStorage.setItem('selectedUserId', userId); // Almacenar userId en localStorage
+        setTimeout(() => {
+          location.reload(); // Recargar la página
+        }, 100); // Añadir un retraso para asegurar que se almacene el userId antes de la recarga
       } else {
         state.selectedUser = null;
+      }
+    },
+    initializeUser(state) {
+      const userId = localStorage.getItem('selectedUserId');
+      if (userId && state.userIdToDetails[userId]) {
+        state.selectedUser = { userId, ...state.userIdToDetails[userId] };
       }
     }
   },
