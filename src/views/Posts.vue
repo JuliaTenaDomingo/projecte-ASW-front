@@ -46,6 +46,8 @@ import posts from '@/services/posts';
 import magazine from '@/services/magazines';
 import {ElLoading} from "element-plus";
 import { ElMessage } from 'element-plus'; // for Vue 3
+import { mapGetters } from 'vuex'; // Importa mapGetters de Vuex
+
 
 export default {
   name: 'Posts',
@@ -60,6 +62,20 @@ export default {
       posts: [],
       filter: 'all',
       sort: 'top',
+    }
+  },
+  computed: {
+    ...mapGetters(['selectedUser']) // Mapea el getter selectedUser desde la store
+  },
+  watch: {
+    selectedUser: {
+      handler(newVal, oldVal) {
+        if (newVal && newVal !== oldVal) {
+          this.getPosts();
+        }
+      },
+      deep: true,
+      immediate: true
     }
   },
   methods: {
