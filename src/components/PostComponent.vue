@@ -34,7 +34,7 @@
                     <el-col>
                         <el-button :link="true" style="color:#0F0142" @click="goToPost" size="small" >{{ post.comments_count }} comments</el-button>
                         <el-button v-if="!post.current_user_boosts" @click="boost()" size="small" style="color:#0F0142; margin-left: 10px;">boost ({{ post.boosts_count }})</el-button>
-                        <el-button v-else @click="unboost()" size="small" type="primary" style="margin-left: 10px;">unboost ({{ post.boosts_count }})</el-button>
+                        <el-button v-else @click="unboost()" size="small" style="background-color:#0f0142; color: white; margin-left: 10px;">unboost ({{ post.boosts_count }})</el-button>
                         <el-button  v-if="post.current_user_owns" @click="editPost()" size="small" style="color:#0F0142; margin-left: 10px;">edit</el-button>
                         <el-button  v-if="post.current_user_owns" @click="deletePost()" size="small" style="color:#0F0142; margin-left: 10px;">delete</el-button>
                     </el-col>
