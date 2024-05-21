@@ -1,10 +1,9 @@
 <template>
-  <el-menu :default-active="activeIndex" :ellipsis="false" background-color="#409EFF" text-color="#fff"
-      active-text-color="#fff" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-      <el-menu-item index="0">
-          <h2 style="color: white;">Tuiter</h2>
-      </el-menu-item>
-
+    <el-menu :default-active="activeIndex" :ellipsis="false" background-color="#0F0142" text-color="#fff"
+        active-text-color="#fff" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+        <el-menu-item index="0">
+        <h2 style="color: white;">Tuiter</h2>
+        </el-menu-item>
       <div class="flex-grow" />
 
       <el-menu-item index="1">Posts</el-menu-item>
