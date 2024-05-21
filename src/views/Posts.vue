@@ -1,4 +1,14 @@
 <template>
+  <el-form v-if="showSearchBar" @submit.prevent="getPosts()">
+    <el-form-item>
+      <el-input v-model="search" placeholder="Search" clearable></el-input>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" native-type="submit">Search</el-button>
+    </el-form-item>
+  </el-form>
+
+  <div v-else>
   <el-card class="box-card" shadow="hover" style="margin: 20px; height: 50px;" :style="{ background: '#0F0142' }">
     <el-row>
       <el-col :span="12" style="margin: -10px 0;">
@@ -38,6 +48,7 @@
     </el-row>
   </el-card>
   <PostComponent v-for="post in posts" :key="post.id" :post="post" @updatePost="updatePost" @deletePost="deletePost"></PostComponent>
+</div>  
 </template>
 
 <script>
@@ -53,7 +64,8 @@ export default {
     PostComponent
   },
   props: {
-    magazine_id: String, default: '', required: false
+    magazine_id: String, default: '', required: false,
+    showSearchBar: Boolean, default: false, required: false
   },
   data() {
     return {

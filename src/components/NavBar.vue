@@ -70,7 +70,7 @@ export default {
         handleSelect(key, keyPath) {
             console.log(key, keyPath);
             this.activeIndex = key;
-            if (key === '1' || key === '0' || key === '6') {
+            if (key === '1' || key === '0') {
                 this.$router.push({ name: 'Posts' });
             } else if (key === '2') {
                 this.$router.push({ name: 'Magazines' });
@@ -94,6 +94,10 @@ export default {
             } else if (key === '5-4') {
                 localStorage.setItem('apiKey', "");
                 location.reload();
+            }
+            else if (key === '6') {
+                this.$router.push({ name: 'Posts' });
+                this.$emit('showSearchBar', true);
             }
         },
         setApiKey() {

@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <NavBar/>
+    <NavBar @showSearchBar="showSearchBar = $event"/>
     <el-alert v-if="apiKey === '' || apiKey === null" title="You need to set an API key to use this application" type="error" show-icon></el-alert>
-    <router-view v-else></router-view>
+    <router-view v-else :showSearchBar="showSearchBar"></router-view>
   </div>
 </template>
 
@@ -17,7 +17,8 @@ export default {
   },
   data() {
     return {
-      apiKey: localStorage.getItem('apiKey')
+      apiKey: localStorage.getItem('apiKey'),
+      showSearchBar: false, // Add this line
     }
   }
 }
