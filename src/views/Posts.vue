@@ -1,12 +1,24 @@
 <template>
-  <el-form v-if="showSearchBar" @submit.prevent="getPosts()">
-    <el-form-item>
-      <el-input v-model="search" placeholder="Search" clearable></el-input>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" native-type="submit">Search</el-button>
-    </el-form-item>
-  </el-form>
+  <div class="search-bar" v-if="showSearchBar">
+    <el-form  @submit.prevent="getPosts()">
+      <el-row :gutter="10">
+      <el-col :span="20">
+        <el-form-item>
+          <el-input v-model="search" placeholder="Search" clearable></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="4">
+        <el-form-item>
+          <el-button style="background: #0F0142; color: white" native-type="submit">
+            <el-icon>
+              <Search />
+            </el-icon>
+          </el-button>
+        </el-form-item>
+      </el-col>
+    </el-row>
+    </el-form>
+  </div>
 
   <div v-else>
   <el-card class="box-card" shadow="hover" style="margin: 20px; height: 50px;" :style="{ background: '#0F0142' }">
@@ -113,5 +125,12 @@ export default {
 .selected-button {
   background-color: white;
   color: #0F0142;
+}
+.search-bar{
+  padding: 20px 200px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 </style>
