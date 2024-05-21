@@ -4,7 +4,7 @@
     :post="post"
     @updatePost="updatePost" >
   </PostComponent>
-  <NewCommentComponent />
+  <NewCommentComponent @updateComment="updateComment"/>
   <el-card class="box-card" shadow="hover" style="margin: 20px; height: 50px;" :body-style="{ background: '#409EFF' }">
     <el-row>
       <el-col :span="12" style="margin: -10px 0;">
@@ -26,8 +26,16 @@
       </el-col>
     </el-row>
   </el-card>
-  <CommentComponent v-for="comment in comments" :key="comment.id" :comment="comment"></CommentComponent>
-</template>
+  <div v-for="comment in comments" :key="comment.id">
+    <CommentComponent
+        :comment="comment"
+        :commentToEdit="commentToEdit"
+        @updateComment="updateComment"
+        @commentDeleted="deleteComment"
+        @editComment="editComment"
+    ></CommentComponent>
+    <div class="separator"></div>
+  </div></template>
 
 <script>
 import PostComponent from '../components/PostComponent.vue';
@@ -47,7 +55,8 @@ export default {
   data() {
     return {
       post: {},
-      comments: []
+      comments: [],
+      commentToEdit: null
     }
   },
   methods: {
@@ -71,6 +80,24 @@ export default {
         this.post = newPost;
       }
     },
+    async updateComment(updatedComment) {
+      const index = this.comments.findIndex(comment => comment.id === updatedComment.id);
+      if (index !== -1) {
+        const existingReplies = this.comments[index].all_replies;
+        const mergedComment = { ...this.comments[index], ...updatedComment };
+        mergedComment.all_replies = existingReplies;
+        this.comments.splice(index, 1, mergedComment);
+      }
+    },
+    async deleteComment(commentId) {
+      const index = this.comments.findIndex(comment => comment.id === commentId);
+      if (index !== -1) {
+        this.comments.splice(index, 1);
+      }
+    },
+    async editComment(comment) {
+      this.commentToEdit = comment;
+    },
   },
   async mounted() {
     await this.getPost()
@@ -87,5 +114,10 @@ export default {
 .selected-button {
   background-color: white;
   color: #409EFF;
+}
+.separator {
+  border-bottom: 1px solid #ccc;
+  width: 97%;
+  margin: auto;
 }
 </style>

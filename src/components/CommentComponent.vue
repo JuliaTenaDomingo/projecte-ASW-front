@@ -20,7 +20,7 @@
             <el-button :link="true" style="color:#409EFF" @click="reply()">reply</el-button>
             <el-button v-if="comment.current_user_owns" @click="edit()" size="small" style="color:#409EFF; margin-left: 10px;">
               edit</el-button>
-            <el-button v-if="comment.current_user_owns" size="small" style="color:#409EFF; margin-left: 10px;">
+            <el-button v-if="comment.current_user_owns" @click="deleteComment()" size="small" style="color:#409EFF; margin-left: 10px;">
               delete</el-button>
           </el-col>
         </el-row>
@@ -43,20 +43,43 @@
         </el-row>
       </el-col>
     </el-row>
+    <NewCommentComponent v-if="isEditing" @updateComment="handleUpdateComment" :commentToEdit="commentToEdit"/>
   </el-card>
+
+  <div class="comment">
+    <CommentComponent
+        v-for="reply in comment.all_replies"
+        :key="reply.id"
+        :comment="reply"
+        @updateComment="updateReply"
+        @commentDeleted="deleteReply"
+    />
+  </div>
 </template>
 
 <script>
 import moment from 'moment';
 import {ElMessage} from "element-plus";
 import comments from "@/services/comments.js";
+import NewCommentComponent from "@/components/NewCommentComponent.vue";
 
 export default {
   name: 'CommentComponent',
+  components: {NewCommentComponent},
+  emits: ['updateComment', 'commentDeleted', 'editComment'],
   props: {
     comment: {
       type: Object,
       required: true
+    },
+    commentToEdit: {
+      type: Object,
+      default: null
+    }
+  },
+  computed: {
+    isEditing() {
+      return this.commentToEdit && this.commentToEdit.id === this.comment.id;
     }
   },
   methods: {
@@ -67,10 +90,22 @@ export default {
       this.$router.push({ name: 'User', params: { user_id: this.comment.user_id } });
     },
     async edit() {
-      this.$router.push({ name: 'EditComment', params: { comment_id: this.comment.id } });
+      this.$emit('editComment', this.comment);
+    },
+    async handleUpdateComment(updatedComment) {
+      this.$emit('editComment', null);
+      this.$emit('updateComment', updatedComment);
+    },
+    async deleteComment() {
+      const response = await comments.removeComment(this.$route.params.post_id, this.comment.id);
+      if (response.status === 200 || response.status === 204) {
+        this.$emit('commentDeleted', this.comment.id);
+      } else {
+        console.error('Error deleting comment. Status:', response.status, 'Response data:', response.data);
+      }
     },
     async like() {
-      const response = await comments.likeComment(this.post.id, this.comment.id);
+      const response = await comments.likeComment(this.$route.params.post_id, this.comment.id);
       if (response.status === 200) {
         this.$emit('updateComment', response.data);
         ElMessage.success('Comment successfully liked');
@@ -78,7 +113,7 @@ export default {
       else ElMessage.error('Error liking comment');
     },
     async unlike() {
-      const response = await comments.unlikeComment(this.post.id, this.comment.id);
+      const response = await comments.unlikeComment(this.$route.params.post_id, this.comment.id);
       if (response.status === 200) {
         this.$emit('updateComment', response.data);
         ElMessage.success('Comment successfully unliked');
@@ -86,7 +121,7 @@ export default {
       else ElMessage.error('Error unliking comment');
     },
     async dislike() {
-      const response = await comments.dislikeComment(this.post.id, this.comment.id);
+      const response = await comments.dislikeComment(this.$route.params.post_id, this.comment.id);
       if (response.status === 200) {
         this.$emit('updateComment', response.data);
         ElMessage.success('Comment successfully disliked');
@@ -94,12 +129,27 @@ export default {
       else ElMessage.error('Error disliking comment');
     },
     async undislike() {
-      const response = await comments.undislikeComment(this.post.id, this.comment.id);
+      const response = await comments.undislikeComment(this.$route.params.post_id, this.comment.id);
       if (response.status === 200) {
         this.$emit('updateComment', response.data);
         ElMessage.success('Comment successfully undisliked');
       }
       else ElMessage.error('Error undisliking comment');
+    },
+    async updateReply(updatedReply) {
+      const index = this.comment.all_replies.findIndex(reply => reply.id === updatedReply.id);
+      if (index !== -1) {
+        const existingReplies = this.comment.all_replies[index].all_replies;
+        const mergedReply = { ...this.comment.all_replies[index], ...updatedReply };
+        mergedReply.all_replies = existingReplies;
+        this.comment.all_replies.splice(index, 1, mergedReply);
+      }
+    },
+    async deleteReply(replyId) {
+      const index = this.comment.all_replies.findIndex(reply => reply.id === replyId);
+      if (index !== -1) {
+        this.comment.all_replies.splice(index, 1);
+      }
     },
   },
 }
@@ -109,5 +159,8 @@ export default {
 a {
   color: #409EFF;
   font-size: small;
+}
+.comment {
+  margin-left: 20px;
 }
 </style>
