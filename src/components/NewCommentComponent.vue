@@ -21,6 +21,10 @@ export default {
     commentToEdit: {
       type: Object,
       default: null
+    },
+    commentToReply: {
+      type: Number,
+      default: null
     }
   },
   data() {
@@ -32,9 +36,19 @@ export default {
   methods: {
     async createComment() {
       const postId = this.$route.params.post_id;
+      let comment_id = null;
+      if (this.commentToReply) {
+        console.log(this.commentToReply)
+        comment_id = this.commentToReply;
+      } else if (this.commentToEdit && this.commentToEdit.comment_id) {
+        console.log(this.commentToEdit.comment_id)
+        console.log("EDIT");
+        comment_id = this.commentToEdit.comment_id;
+      }
       const comment = {
         body: this.newComment,
-        comment_id: this.commentToEdit && this.commentToEdit.comment_id ? this.commentToEdit.comment_id : null,
+        comment_id: comment_id,
+
       };
       let response;
       if (this.commentId) {
@@ -44,6 +58,7 @@ export default {
       }
       if (response.status === 201) {
         this.newComment = '';
+        console.log(response.data);
         this.$emit('commentCreated');
       } else if (response.status === 200) {
         this.$emit('updateComment', response.data);
