@@ -31,6 +31,7 @@
         :comment="comment"
         :commentToEdit="commentToEdit"
         :commentToReply="commentToReply"
+        @commentCreated="getPost"
         @replyComment="replyComment"
         @updateComment="updateComment"
         @commentDeleted="deleteComment"
@@ -95,7 +96,6 @@ export default {
       }
     },
     async editComment(comment) {
-      console.log('Editing comment on editComment on POST.vue:', comment);
       this.commentToEdit = comment;
     },
 
@@ -108,9 +108,8 @@ export default {
     },
 
     //Reply comments
-    async replyComment(commentId) {
-      console.log(commentId);
-      this.commentToReply = commentId;
+    async replyComment(comment) {
+      this.commentToReply = comment;
     },
 
   },

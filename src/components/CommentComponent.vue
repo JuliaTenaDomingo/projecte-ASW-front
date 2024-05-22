@@ -44,7 +44,7 @@
       </el-col>
     </el-row>
     <NewCommentComponent v-if="isEditing" @updateComment="handleUpdateComment" :commentToEdit="commentToEdit"/>
-    <NewCommentComponent v-if="isReplying" :commentToReply="commentToReply"/>
+    <NewCommentComponent v-if="isReplying" @commentCreated="handleCommentCreated" :commentToReply="commentToReply"/>
   </el-card>
 
   <div class="comment">
@@ -53,6 +53,7 @@
         :key="reply.id"
         :comment="reply"
         :commentToEdit="commentToEdit"
+        @replyComment="replyComment"
         @updateComment="updateReply"
         @commentDeleted="deleteReply"
         @editComment="editComment"
@@ -69,7 +70,7 @@ import NewCommentComponent from "@/components/NewCommentComponent.vue";
 export default {
   name: 'CommentComponent',
   components: {NewCommentComponent},
-  emits: ['updateComment', 'commentDeleted', 'editComment', 'replyComment'],
+  emits: ['updateComment', 'commentDeleted', 'editComment', 'replyComment', 'commentCreated'],
   props: {
     comment: {
       type: Object,
@@ -80,7 +81,7 @@ export default {
       default: null
     },
     commentToReply: {
-      type: Number,
+      type: Object,
       default: null
     }
   },
@@ -89,7 +90,9 @@ export default {
       return this.commentToEdit && this.commentToEdit.id === this.comment.id;
     },
     isReplying() {
-      return this.commentToReply === this.comment.id;
+      console.log("bool")
+      console.log(this.commentToReply, this.comment.id)
+      return this.commentToReply && this.commentToReply.id === this.comment.id;
     }
   },
   methods: {
@@ -102,10 +105,12 @@ export default {
 
     //Edit comment
     async edit() {
+      console.log("Step 1")
       this.$emit('editComment', this.comment);
     },
     editComment(comment) {
-      this.$emit('editComment', comment); // Re-emit the editComment event to the parent component
+      console.log("Step 3")
+      this.$emit('editComment', comment);
     },
     handleUpdateComment(updatedComment) {
       this.$emit('editComment', null);
@@ -139,7 +144,16 @@ export default {
 
     //Reply comment
     async reply() {
-      this.$emit('replyComment', this.comment.id);
+      this.$emit('replyComment', this.comment);
+    },
+    async replyComment (comment) {
+      console.log("reply reply")
+      this.$emit('replyComment', comment);
+    },
+    async handleCommentCreated() {
+      this.$emit('replyComment', null);
+      this.$emit('commentCreated');
+
     },
 
     //Reactions

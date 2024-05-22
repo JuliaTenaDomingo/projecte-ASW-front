@@ -23,7 +23,7 @@ export default {
       default: null
     },
     commentToReply: {
-      type: Number,
+      type: Object,
       default: null
     }
   },
@@ -38,11 +38,8 @@ export default {
       const postId = this.$route.params.post_id;
       let comment_id = null;
       if (this.commentToReply) {
-        console.log(this.commentToReply)
-        comment_id = this.commentToReply;
+        comment_id = this.commentToReply.id;
       } else if (this.commentToEdit && this.commentToEdit.comment_id) {
-        console.log(this.commentToEdit.comment_id)
-        console.log("EDIT");
         comment_id = this.commentToEdit.comment_id;
       }
       const comment = {
@@ -60,6 +57,7 @@ export default {
         this.newComment = '';
         console.log(response.data);
         this.$emit('commentCreated');
+        this.$emit('commentCreatedUpdate');
       } else if (response.status === 200) {
         this.$emit('updateComment', response.data);
       } else {
