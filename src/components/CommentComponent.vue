@@ -44,6 +44,7 @@
       </el-col>
     </el-row>
     <NewCommentComponent v-if="isEditing" @updateComment="handleUpdateComment" :commentToEdit="commentToEdit"/>
+    <NewCommentComponent v-if="isReplying" :commentToReply="commentToReply"/>
   </el-card>
 
   <div class="comment">
@@ -68,7 +69,7 @@ import NewCommentComponent from "@/components/NewCommentComponent.vue";
 export default {
   name: 'CommentComponent',
   components: {NewCommentComponent},
-  emits: ['updateComment', 'commentDeleted', 'editComment'],
+  emits: ['updateComment', 'commentDeleted', 'editComment', 'replyComment'],
   props: {
     comment: {
       type: Object,
@@ -77,11 +78,18 @@ export default {
     commentToEdit: {
       type: Object,
       default: null
+    },
+    commentToReply: {
+      type: Number,
+      default: null
     }
   },
   computed: {
     isEditing() {
       return this.commentToEdit && this.commentToEdit.id === this.comment.id;
+    },
+    isReplying() {
+      return this.commentToReply === this.comment.id;
     }
   },
   methods: {
@@ -91,6 +99,8 @@ export default {
     async goToUser() {
       this.$router.push({ name: 'User', params: { user_id: this.comment.user_id } });
     },
+
+    //Edit comment
     async edit() {
       this.$emit('editComment', this.comment);
     },
@@ -99,14 +109,19 @@ export default {
     },
     handleUpdateComment(updatedComment) {
       this.$emit('editComment', null);
-      if (updatedComment.comment_id === this.comment.id) {
-        // The updated comment is a reply to this comment
-        this.updateReply(updatedComment);
-      } else {
-        // The updated comment is this comment itself
-        this.$emit('updateComment', updatedComment);
+      this.$emit('updateComment', updatedComment);
+    },
+    async updateReply(updatedReply) {
+      const index = this.comment.all_replies.findIndex(reply => reply.id === updatedReply.id);
+      if (index !== -1) {
+        const existingReplies = this.comment.all_replies[index].all_replies;
+        const mergedReply = { ...this.comment.all_replies[index], ...updatedReply };
+        mergedReply.all_replies = existingReplies;
+        this.comment.all_replies.splice(index, 1, mergedReply);
       }
     },
+
+    //Delete comment
     async deleteComment() {
       const response = await comments.removeComment(this.$route.params.post_id, this.comment.id);
       if (response.status === 200 || response.status === 204) {
@@ -115,6 +130,19 @@ export default {
         console.error('Error deleting comment. Status:', response.status, 'Response data:', response.data);
       }
     },
+    async deleteReply(replyId) {
+      const index = this.comment.all_replies.findIndex(reply => reply.id === replyId);
+      if (index !== -1) {
+        this.comment.all_replies.splice(index, 1);
+      }
+    },
+
+    //Reply comment
+    async reply() {
+      this.$emit('replyComment', this.comment.id);
+    },
+
+    //Reactions
     async like() {
       const response = await comments.likeComment(this.$route.params.post_id, this.comment.id);
       if (response.status === 200) {
@@ -146,21 +174,6 @@ export default {
         ElMessage.success('Comment successfully undisliked');
       }
       else ElMessage.error('Error undisliking comment');
-    },
-    async updateReply(updatedReply) {
-      const index = this.comment.all_replies.findIndex(reply => reply.id === updatedReply.id);
-      if (index !== -1) {
-        const existingReplies = this.comment.all_replies[index].all_replies;
-        const mergedReply = { ...this.comment.all_replies[index], ...updatedReply };
-        mergedReply.all_replies = existingReplies;
-        this.comment.all_replies.splice(index, 1, mergedReply);
-      }
-    },
-    async deleteReply(replyId) {
-      const index = this.comment.all_replies.findIndex(reply => reply.id === replyId);
-      if (index !== -1) {
-        this.comment.all_replies.splice(index, 1);
-      }
     },
   },
 }

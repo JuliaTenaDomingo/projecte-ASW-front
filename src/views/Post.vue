@@ -4,7 +4,7 @@
     :post="post"
     @updatePost="updatePost" >
   </PostComponent>
-  <NewCommentComponent @updateComment="updateComment"/>
+  <NewCommentComponent @updateComment="updateComment" @commentCreated="getPost"/>
   <el-card class="box-card" shadow="hover" style="margin: 20px; height: 50px;" :body-style="{ background: '#409EFF' }">
     <el-row>
       <el-col :span="12" style="margin: -10px 0;">
@@ -30,6 +30,8 @@
     <CommentComponent
         :comment="comment"
         :commentToEdit="commentToEdit"
+        :commentToReply="commentToReply"
+        @replyComment="replyComment"
         @updateComment="updateComment"
         @commentDeleted="deleteComment"
         @editComment="editComment"
@@ -56,7 +58,8 @@ export default {
     return {
       post: {},
       comments: [],
-      commentToEdit: null
+      commentToEdit: null,
+      commentToReply: null
     }
   },
   methods: {
@@ -80,6 +83,8 @@ export default {
         this.post = newPost;
       }
     },
+
+    //Edit comments
     async updateComment(updatedComment) {
       const index = this.comments.findIndex(comment => comment.id === updatedComment.id);
       if (index !== -1) {
@@ -89,16 +94,25 @@ export default {
         this.comments.splice(index, 1, mergedComment);
       }
     },
+    async editComment(comment) {
+      console.log('Editing comment on editComment on POST.vue:', comment);
+      this.commentToEdit = comment;
+    },
+
+    //Delete comments
     async deleteComment(commentId) {
       const index = this.comments.findIndex(comment => comment.id === commentId);
       if (index !== -1) {
         this.comments.splice(index, 1);
       }
     },
-    async editComment(comment) {
-      console.log('Editing comment on editComment on POST.vue:', comment);
-      this.commentToEdit = comment;
+
+    //Reply comments
+    async replyComment(commentId) {
+      console.log(commentId);
+      this.commentToReply = commentId;
     },
+
   },
   async mounted() {
     await this.getPost()
