@@ -39,7 +39,7 @@
                         <el-button  v-if="post.current_user_owns" @click="deletePost()" size="small" style="color:#0F0142; margin-left: 10px;">delete</el-button>
                     </el-col>
                 </el-row>
-            </el-col>  
+            </el-col>
         </el-row>
     </el-card>
 </template>
@@ -130,7 +130,8 @@ export default {
         async deletePost() {
             const response = await posts.delete(this.post.id);
             if (response.status === 204) {
-                this.$emit('deletePost', response.data);
+                this.$emit('deletePost', this.post.id);
+                this.$emit('updatePost', this.post.id);
                 ElMessage.success('Post successfully deleted');
             }
             else ElMessage.error('Error deleting post');

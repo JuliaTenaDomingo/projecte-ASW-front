@@ -99,8 +99,20 @@ export default {
         alert('No user selected.');
       }
     },
+    navigateToProfile() {
+      const user = this.selectedUser;
+      if (user) {
+        this.$router.push({ path: `/users/${user.userId}` });
+      }
+    },
+    navigateToEditProfile() {
+      const user = this.selectedUser;
+      if (user) {
+        this.$router.push({ path: `/users/${user.userId}/edit` });
+      }
+    }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -108,10 +120,9 @@ export default {
   flex-grow: 1;
 }
 h2 {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif';
 }
 .el-menu-item {
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 </style>
