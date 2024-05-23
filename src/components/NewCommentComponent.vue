@@ -1,5 +1,5 @@
 <template>
-  <el-card class="box-card" shadow="hover" style="margin: 20px;" :body-style="{ background: '#dbe9ff' }">
+  <el-card class="box-card" shadow="hover" style="margin: 20px;" :body-style="{ background: '#EDE7F6' }">
     <el-text style="font-weight: bold; color: black;">Write your comment here</el-text>
     <el-input
         style="margin-top: 20px;"
@@ -56,7 +56,6 @@ export default {
       if (response.status === 201) {
         this.newComment = '';
         this.$emit('commentCreated');
-        this.$emit('commentCreatedUpdate');
       } else if (response.status === 200) {
         this.$emit('updateComment', response.data);
       } else {

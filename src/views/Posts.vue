@@ -1,5 +1,5 @@
 <template>
-  <el-card class="box-card" shadow="hover" style="margin: 10px 0;" :style="{ background: '#409EFF' }">
+  <el-card class="box-card" shadow="hover" style="margin: 10px 0;" :style="{ background: '#EDE7F6' }">
     <el-row>
       <el-col :span="12">
         <el-button 

@@ -5,7 +5,7 @@
     @updatePost="updatePost" >
   </PostComponent>
   <NewCommentComponent @updateComment="updateComment" @commentCreated="getPost"/>
-  <el-card class="box-card" shadow="hover" style="margin: 20px; height: 50px;" :body-style="{ background: '#409EFF' }">
+  <el-card class="box-card" shadow="hover" style="margin: 20px; height: 50px;" :body-style="{ background: '#EDE7F6' }">
     <el-row>
       <el-col :span="12" style="margin: -10px 0;">
         <el-button
@@ -124,12 +124,12 @@ export default {
 <style scoped>
 .custom-button {
   background-color: transparent;
-  color: white;
+  color: grey;
   border: none;
 }
 .selected-button {
   background-color: white;
-  color: #409EFF;
+  color: #0F0142;
 }
 .separator {
   border-bottom: 1px solid #ccc;
