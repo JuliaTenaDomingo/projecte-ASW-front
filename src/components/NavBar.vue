@@ -12,6 +12,17 @@
 
     <div class="flex-grow" />
 
+    <el-sub-menu index="4">
+      <template #title>
+        <el-icon>
+          <Plus />
+        </el-icon>
+      </template>
+      <el-menu-item @click="navigateToAddLink">Add new link</el-menu-item>
+      <el-menu-item @click="navigateToAddThread">Add new thread</el-menu-item>
+      <el-menu-item @click="navigateToAddMagazine">Create new magazine</el-menu-item>
+    </el-sub-menu>
+
     <el-menu-item index="6">
       <template #title>
         <el-icon>
@@ -43,9 +54,11 @@ import 'element-plus/theme-chalk/index.css';
 import { useRoute, useRouter } from 'vue-router';
 import { computed } from 'vue';
 import { mapGetters, mapMutations } from 'vuex';
+import {Plus} from "@element-plus/icons-vue";
 
 export default {
   name: 'NavBar',
+  components: {Plus},
   setup() {
     const route = useRoute();
     const router = useRouter();
@@ -108,12 +121,27 @@ export default {
       if (user) {
         this.$router.push({ path: `/users/${user.userId}/edit` });
       }
+    },
+    navigateToAddLink() {
+      this.$router.push({ name: 'NewPost', query: { isLink: true } });
+    },
+    navigateToAddThread() {
+      this.$router.push({ name: 'NewPost',query: { isLink: false } });
+    },
+    navigateToAddMagazine() {
+      this.$router.push({ name: 'NewMagazine' });
     }
   }
 };
 </script>
 
 <style scoped>
+
+.el-menu-item:hover {
+  background-color: white !important;
+  color: black !important;
+}
+
 .flex-grow {
   flex-grow: 1;
 }
