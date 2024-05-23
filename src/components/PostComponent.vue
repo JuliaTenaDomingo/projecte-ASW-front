@@ -41,13 +41,19 @@
                 </el-row>
             </el-col>
         </el-row>
+        <CommentComponent
+            v-for="comment in comments"
+            :key="comment.id"
+            :comment="comment"
+        />
     </el-card>
 </template>
 
 <script>
 import moment from 'moment';
 import posts from '@/services/posts';
-import { ElMessage } from 'element-plus'; // for Vue 3
+import CommentComponent from './CommentComponent.vue';
+import { ElMessage } from 'element-plus';
 
 export default {
     name: 'PostComponent',
@@ -56,6 +62,13 @@ export default {
             type: Object,
             required: true
         },
+        comments: {
+          type: Array,
+          default: () => []
+        }
+    },
+    components: {
+      CommentComponent,
     },
     methods: {
         timeAgo(date) {
