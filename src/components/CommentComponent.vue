@@ -53,10 +53,12 @@
         :key="reply.id"
         :comment="reply"
         :commentToEdit="commentToEdit"
+        :commentToReply="commentToReply"
         @replyComment="replyComment"
         @updateComment="updateReply"
         @commentDeleted="deleteReply"
         @editComment="editComment"
+        @commentCreated="getPost"
     />
   </div>
 </template>
@@ -90,8 +92,6 @@ export default {
       return this.commentToEdit && this.commentToEdit.id === this.comment.id;
     },
     isReplying() {
-      console.log("bool")
-      console.log(this.commentToReply, this.comment.id)
       return this.commentToReply && this.commentToReply.id === this.comment.id;
     }
   },
@@ -105,11 +105,9 @@ export default {
 
     //Edit comment
     async edit() {
-      console.log("Step 1")
       this.$emit('editComment', this.comment);
     },
     editComment(comment) {
-      console.log("Step 3")
       this.$emit('editComment', comment);
     },
     handleUpdateComment(updatedComment) {
@@ -146,14 +144,16 @@ export default {
     async reply() {
       this.$emit('replyComment', this.comment);
     },
-    async replyComment (comment) {
-      console.log("reply reply")
+    replyComment (comment) {
       this.$emit('replyComment', comment);
     },
-    async handleCommentCreated() {
+    handleCommentCreated() {
       this.$emit('replyComment', null);
       this.$emit('commentCreated');
 
+    },
+    getPost() {
+      this.$emit('commentCreated');
     },
 
     //Reactions

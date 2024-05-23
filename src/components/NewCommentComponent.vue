@@ -55,7 +55,6 @@ export default {
       }
       if (response.status === 201) {
         this.newComment = '';
-        console.log(response.data);
         this.$emit('commentCreated');
         this.$emit('commentCreatedUpdate');
       } else if (response.status === 200) {

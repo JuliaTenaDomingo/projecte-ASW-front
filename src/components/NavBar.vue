@@ -51,7 +51,6 @@ export default {
     },
     methods: {
         handleSelect(key, keyPath) {
-            console.log(key, keyPath);
             this.activeIndex = key;
             if (key === '1') {
                 this.$router.push({ name: 'Posts' });

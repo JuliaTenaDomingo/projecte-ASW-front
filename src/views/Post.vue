@@ -11,17 +11,17 @@
         <el-button
             class="custom-button"
             :class="{ 'selected-button': sort === 'top' }"
-            @click="sort = 'top'; getComments()"
+            @click="sort = 'top'; getPost()"
         >top</el-button>
         <el-button
             class="custom-button"
             :class="{ 'selected-button': sort === 'newest' }"
-            @click="sort = 'newest'; getComments()"
+            @click="sort = 'newest'; getPost()"
         >newest</el-button>
         <el-button
             class="custom-button"
             :class="{ 'selected-button': sort === 'oldest' }"
-            @click="sort = 'oldest'; getComments()"
+            @click="sort = 'oldest'; getPost()"
         >oldest</el-button>
       </el-col>
     </el-row>
@@ -60,7 +60,8 @@ export default {
       post: {},
       comments: [],
       commentToEdit: null,
-      commentToReply: null
+      commentToReply: null,
+      sort: 'top'
     }
   },
   methods: {
@@ -69,7 +70,7 @@ export default {
       const response = await posts.retrieve(this.$route.params.post_id);
       if (response.status === 200) {
         this.post = response.data;
-        const commentsResponse = await comments.listComments(this.$route.params.post_id);
+        const commentsResponse = await comments.listComments(this.$route.params.post_id, this.sort);
         if (commentsResponse.status === 200) {
           this.comments = commentsResponse.data;
         } else {
@@ -87,6 +88,7 @@ export default {
 
     //Edit comments
     async updateComment(updatedComment) {
+      location.reload()
       const index = this.comments.findIndex(comment => comment.id === updatedComment.id);
       if (index !== -1) {
         const existingReplies = this.comments[index].all_replies;
