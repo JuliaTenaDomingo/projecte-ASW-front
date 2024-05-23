@@ -1,7 +1,7 @@
 <template>
-  <el-card class="box-card" shadow="hover" style="margin: 10px 0;" :body-style="{ background: '#409EFF' }">
+  <el-card class="box-card" shadow="hover" style="margin: 20px; height: 50px;" :body-style="{ background: '#0F0142' }">
     <el-row>
-      <el-col :span="12">
+      <el-col :span="12" style="margin: -10px 0;">
         <el-button 
           class="custom-button" 
           :class="{ 'selected-button': sort === 'posts' }" 
@@ -71,6 +71,6 @@ export default {
 }
 .selected-button {
   background-color: white;
-  color: #409EFF;
+  color: #0F0142;
 }
 </style>

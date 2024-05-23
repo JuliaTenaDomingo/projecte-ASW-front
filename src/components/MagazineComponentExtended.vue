@@ -1,23 +1,23 @@
 <template>
-    <el-card class="box-card" shadow="hover" style="margin: 10px 0;" :body-style="{ background: '#dbe9ff' }">
+    <el-card class="box-card" shadow="hover" style="margin: 20px" :body-style="{ background: '#EDE7F6' }">
           <el-row type="flex" align="middle">
               <el-col :xl="2" :lg="2" :md="2" :sm="3" :xs="4">
                   <el-row>
                       <el-col>
-                          <el-button v-if="!magazine.current_user_subscribed" style="color:#409EFF" @click="subscribe()" size="large"><el-icon><User /></el-icon><el-icon><Plus/></el-icon>{{ magazine.subscribers_count }}</el-button>
-                          <el-button v-else @click="unsubscribe()" type="primary" size="large"><el-icon><UserFilled /></el-icon><el-icon><Plus /></el-icon>{{ magazine.subscribers_count }}</el-button>
+                          <el-button v-if="!magazine.current_user_subscribed" style="color:#0F0142" @click="subscribe()" size="large"><el-icon><User /></el-icon><el-icon><Plus/></el-icon>{{ magazine.subscribers_count }}</el-button>
+                          <el-button v-else @click="unsubscribe()" style="background-color:#0f0142; color: white" size="large"><el-icon><UserFilled /></el-icon><el-icon><Plus /></el-icon>{{ magazine.subscribers_count }}</el-button>
                       </el-col>
                   </el-row>
               </el-col>
               <el-col :xl="11" :lg="11" :md="11" :sm="11" :xs="10">
                   <el-row style="margin-bottom: 5px; height: 30px;">
                       <el-col>
-                          <el-button :link="true" style="font-size: large; font-weight: bold; margin-right:10px; color:#409EFF">{{ magazine.name }}</el-button>
+                          <el-button :link="true" style="font-size: large; font-weight: bold; margin-right:10px; color:#0F0142">{{ magazine.name }}</el-button>
                       </el-col>
                   </el-row>
                   <el-row style="margin-bottom: 30px; height: 15px;">
                       <el-col >
-                          <el-button style="color:#409EFF" :link="true" @click="goToUser()" >{{ magazine.owner }}</el-button>
+                          <el-button style="color:#0F0142" :link="true" @click="goToUser()" >{{ magazine.owner }}</el-button>
                           <el-text>, {{ timeAgo(magazine.created_at) }}</el-text>
                       </el-col>
                   </el-row>
@@ -31,7 +31,7 @@
               <el-col :xl="11" :lg="11" :md="11" :sm="10" :xs="10">
                 <el-row style="margin-bottom: 5px; height: 30px;">
                       <el-col >
-                          <el-text style="font-size: large; font-weight: bold; margin-right:10px; color:#409EFF">{{ magazine.title }}</el-text>
+                          <el-text style="font-size: large; font-weight: bold; margin-right:10px; color:#0F0142">{{ magazine.title }}</el-text>
                       </el-col>
                   </el-row>
                 <el-row style="margin-bottom: 30px; height: 5px;">

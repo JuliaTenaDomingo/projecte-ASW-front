@@ -30,6 +30,8 @@ export default {
     },
     async remove(postId) {
         return await axios.delete(`/posts/${postId}`)
+    },
+    async delete(postId) {
+        return await axios.delete(`/posts/${postId}`)
     }
-
 }

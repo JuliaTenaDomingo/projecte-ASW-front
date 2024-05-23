@@ -4,41 +4,42 @@
             <el-col :xl="1" :lg="2" :md="2" :sm="3" :xs="4">
                 <el-row>
                     <el-col>
-                        <el-button v-if="!post.current_user_likes" @click="like()" style="color:#409EFF" size="large"><el-icon><Top /></el-icon> {{ post.likes_count }}</el-button>
-                        <el-button v-else @click="unlike()" type="primary" size="large"><el-icon><Top /></el-icon> {{ post.likes_count }}</el-button>
+                        <el-button v-if="!post.current_user_likes" @click="like()" style="color:#0f0142" size="large"><el-icon><Top /></el-icon> {{ post.likes_count }}</el-button>
+                        <el-button v-else @click="unlike()" style="background-color:#0f0142; color: white" size="large"><el-icon><Top /></el-icon> {{ post.likes_count }}</el-button>
                     </el-col>
                 </el-row>
                 <br>
                 <el-row>
                     <el-col>
-                        <el-button v-if="!post.current_user_dislikes" @click="dislike()" style="color:#409EFF" size="large"><el-icon><Bottom /> </el-icon> {{ post.dislikes_count }}</el-button>
-                        <el-button v-else @click="undislike()" type="primary" size="large"><el-icon><Bottom /> </el-icon> {{ post.dislikes_count }}</el-button>
+                        <el-button v-if="!post.current_user_dislikes" @click="dislike()" style="color:#0f0142" size="large"><el-icon><Bottom /> </el-icon> {{ post.dislikes_count }}</el-button>
+                        <el-button v-else @click="undislike()" style="background-color:#0f0142; color: white" size="large"><el-icon><Bottom /> </el-icon> {{ post.dislikes_count }}</el-button>
                     </el-col>
                 </el-row>
             </el-col>
             <el-col :xl="23" :lg="22" :md="22" :sm="21" :xs="20">
                 <el-row style="margin-bottom: 5px; height: 30px;">
                     <el-col>
-                        <el-button :link="true" @click="goToPost" style="color:#409EFF; font-size: large; font-weight: bold; margin-right:10px">{{ post.title }}</el-button>
+                        <el-button :link="true" @click="goToPost" style="color:#0F0142; font-size: large; font-weight: bold; margin-right:10px">{{ post.title }}</el-button>
                         <a v-if=post.url :href="formatUrl(post.url)" target="_blank">({{ post.url }})</a>
                     </el-col>
                 </el-row>
                 <el-row style="margin-bottom: 30px; height: 15px;">
                     <el-col >
-                        <el-button style="color:#409EFF" :link="true" @click="goToUser()" >{{ post.user_name }}</el-button>
+                        <el-button style="color:#0F0142" :link="true" @click="goToUser()" >{{ post.user_name }}</el-button>
                         <el-text>, {{ timeAgo(post.created_at) }} to </el-text>
-                        <el-button style="color:#409EFF" :link="true" @click="goToMagazine()">{{ post.magazine_name }}</el-button>
+                        <el-button style="color:#0F0142" :link="true" @click="goToMagazine()">{{ post.magazine_name }}</el-button>
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-col >
-                        <el-button :link="true" style="color:#409EFF" @click="goToPost" size="small" >{{ post.comments_count }} comments</el-button>
-                        <el-button v-if="!post.current_user_boosts" @click="boost()" size="small" style="color:#409EFF; margin-left: 10px;">boost ({{ post.boosts_count }})</el-button>
+                    <el-col>
+                        <el-button :link="true" style="color:#0F0142" @click="goToPost" size="small" >{{ post.comments_count }} comments</el-button>
+                        <el-button v-if="!post.current_user_boosts" @click="boost()" size="small" style="color:#0F0142; margin-left: 10px;">boost ({{ post.boosts_count }})</el-button>
                         <el-button v-else @click="unboost()" size="small" type="primary" style="margin-left: 10px;">unboost ({{ post.boosts_count }})</el-button>
-                        <el-button v-if="post.current_user_owns" @click="edit()" size="small" style="color:#409EFF; margin-left: 10px;">edit</el-button>
+                        <el-button  v-if="post.current_user_owns" @click="editPost()" size="small" style="color:#0F0142; margin-left: 10px;">edit</el-button>
+                        <el-button  v-if="post.current_user_owns" @click="deletePost()" size="small" style="color:#0F0142; margin-left: 10px;">delete</el-button>
                     </el-col>
                 </el-row>
-            </el-col>  
+            </el-col>
         </el-row>
         <CommentComponent
             v-for="comment in comments"
@@ -136,8 +137,17 @@ export default {
         async goToPost() {
             this.$router.push({ name: 'Post', params: { post_id: this.post.id } });
         },
-        async edit() {
+        async editPost() {
             this.$router.push({ name: 'EditPost', params: { post_id: this.post.id } });
+        },
+        async deletePost() {
+            const response = await posts.delete(this.post.id);
+            if (response.status === 204) {
+                this.$emit('deletePost', this.post.id);
+                this.$emit('updatePost', this.post.id);
+                ElMessage.success('Post successfully deleted');
+            }
+            else ElMessage.error('Error deleting post');
         }
     },
 }
@@ -145,7 +155,7 @@ export default {
 
 <style scoped>
 a {
-    color: #409EFF;
-    font-size: small;
+  color: #0F0142;
+  font-size: small;
 }
 </style>

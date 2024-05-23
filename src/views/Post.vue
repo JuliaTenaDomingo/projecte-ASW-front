@@ -2,7 +2,8 @@
   <PostComponent
     :key="post.id"
     :post="post"
-    @updatePost="updatePost" >
+    @updatePost="updatePost"
+    @deletePost="deletePost">
   </PostComponent>
   <NewCommentComponent @updateComment="updateComment" @commentCreated="getPost"/>
   <el-card class="box-card" shadow="hover" style="margin: 20px; height: 50px;" :body-style="{ background: '#EDE7F6' }">
@@ -38,7 +39,8 @@
         @editComment="editComment"
     ></CommentComponent>
     <div class="separator"></div>
-  </div></template>
+  </div>
+</template>
 
 <script>
 import PostComponent from '../components/PostComponent.vue';
@@ -84,6 +86,9 @@ export default {
       if (this.post.id === newPost.id) {
         this.post = newPost;
       }
+    },
+    async deletePost() {
+      this.$router.push({ name: 'Posts' });
     },
 
     //Edit comments

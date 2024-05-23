@@ -1,24 +1,32 @@
 <template>
   <div id="app">
-    <NavBar/>
-    <el-alert v-if="apiKey === '' || apiKey === null" title="You need to set an API key to use this application" type="error" show-icon></el-alert>
-    <router-view v-else></router-view>
+    <NavBar />
+    <el-alert v-if="!hasSelectedUser" title="You need to select a user to use this application" type="error" show-icon></el-alert>
+    <router-view v-if="hasSelectedUser"></router-view>
   </div>
 </template>
 
 <script>
 import NavBar from './components/NavBar.vue'
 import 'element-plus/theme-chalk/index.css'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'App',
   components: {
     NavBar
   },
-  data() {
-    return {
-      apiKey: localStorage.getItem('apiKey')
+  computed: {
+    ...mapGetters(['selectedUser']),
+    hasSelectedUser() {
+      return this.selectedUser !== null;
     }
+  },
+  methods: {
+    ...mapMutations(['initializeUser']),
+  },
+  mounted() {
+    this.initializeUser(); // Inicializar el usuario seleccionado desde localStorage
   }
 }
 </script>
@@ -27,5 +35,4 @@ export default {
 body {
   font-family: 'Roboto', sans-serif;
 }
-
 </style>
