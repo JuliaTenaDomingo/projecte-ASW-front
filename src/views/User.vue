@@ -215,7 +215,6 @@ export default {
 .el-tabs__item {
   font-size: 20px !important;
 }
-
 .custom-button {
   background-color: transparent;
   color: white;
