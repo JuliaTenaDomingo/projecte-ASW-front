@@ -11,7 +11,7 @@
 
       <div class="flex-grow" />
 
-      <el-menu-item index="6">
+      <el-menu-item index="6" @click="toggleSearchBar">
           <template #title>
               <el-icon>
                   <Search />
@@ -73,6 +73,7 @@ export default {
       this.activeIndex = key;
       if (key === '1' || key === '0' || key === '6') {
         this.$router.push({ name: 'Posts' });
+        this.$emit('toggleSearchBar', false);
       } else if (key === '2') {
         this.$router.push({ name: 'Magazines' });
       } else if (key === '3') {
@@ -83,9 +84,6 @@ export default {
         this.$router.push({ name: 'NewLink' });
       } else if (key === '4-3') {
         this.$router.push({ name: 'NewMagazine' });
-      } else if (key === '6') {
-        this.$router.push({ name: 'Posts' });
-        this.$emit('showSearchBar', true);
       }
     },
     selectUser(userId) {
@@ -110,7 +108,10 @@ export default {
       if (user) {
         this.$router.push({ path: `/users/${user.userId}/edit` });
       }
-    }
+    },
+    toggleSearchBar() {
+      this.$emit('toggleSearchBar', true);
+    },
   }
 };
 </script>
@@ -120,7 +121,7 @@ export default {
   flex-grow: 1;
 }
 h2 {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif';
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 .el-menu-item {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

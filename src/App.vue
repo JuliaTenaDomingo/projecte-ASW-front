@@ -1,9 +1,8 @@
 <template>
   <div id="app">
-    <NavBar @showSearchBar="showSearchBar = $event"/>
+    <NavBar @toggleSearchBar="toggleSearchBar"/>
     <el-alert v-if="!hasSelectedUser" title="You need to select a user to use this application" type="error" show-icon></el-alert>
-    <router-view v-if="hasSelectedUser"></router-view>
-    <router-view :showSearchBar="showSearchBar"></router-view>
+    <router-view v-if="hasSelectedUser" :showSearchBar="showSearchBar"></router-view>
   </div>
 </template>
 
@@ -19,7 +18,7 @@ export default {
   },
   data() {
     return {
-      showSearchBar: true
+      showSearchBar: false,
     }
   },
   computed: {
@@ -30,6 +29,9 @@ export default {
   },
   methods: {
     ...mapMutations(['initializeUser']),
+   toggleSearchBar(show) {
+     this.showSearchBar = show;
+   },
   },
   mounted() {
     this.initializeUser(); // Inicializar el usuario seleccionado desde localStorage

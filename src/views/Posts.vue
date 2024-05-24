@@ -9,7 +9,7 @@
       </el-col>
       <el-col :span="4">
         <el-form-item>
-          <el-button style="background: #0F0142; color: white" native-type="submit">
+          <el-button style="background: #0F0142; color: white" native-type="submit" @click="mostraLlista">
             <el-icon>
               <Search />
             </el-icon>
@@ -19,48 +19,49 @@
     </el-row>
     </el-form>
   </div>
+  <div v-if="apareceLista">
+    <el-card class="box-card" shadow="hover" style="margin: 20px; height: 50px;" :style="{ background: '#0F0142' }">
+      <el-row>
+        <el-col :span="12" style="margin: -10px 0;">
+          <el-button
+              class="custom-button"
+              :class="{ 'selected-button': sort === 'top' }"
+              @click="sort = 'top'; getPosts()"
+          >Top</el-button>
+          <el-button
+              class="custom-button"
+              :class="{ 'selected-button': sort === 'newest' }"
+              @click="sort = 'newest'; getPosts()"
+          >Newest</el-button>
+          <el-button
+              class="custom-button"
+              :class="{ 'selected-button': sort === 'commented' }"
+              @click="sort = 'commented'; getPosts()"
+          >Commented</el-button>
+        </el-col>
+        <el-col :span="12" style="text-align: right;margin: -10px 0;">
+          <el-button
+              class="custom-button"
+              :class="{ 'selected-button': filter === 'all' }"
+              @click="filter = 'all'; getPosts()"
+          >All</el-button>
+          <el-button
+              class="custom-button"
+              :class="{ 'selected-button': filter === 'links' }"
+              @click="filter = 'links'; getPosts()"
+          >Links</el-button>
+          <el-button
+              class="custom-button"
+              :class="{ 'selected-button': filter === 'threads' }"
+              @click="filter = 'threads'; getPosts()"
+          >Threads</el-button>
+        </el-col>
+      </el-row>
+    </el-card>
 
-  <div v-else>
-  <el-card class="box-card" shadow="hover" style="margin: 20px; height: 50px;" :style="{ background: '#0F0142' }">
-    <el-row>
-      <el-col :span="12" style="margin: -10px 0;">
-        <el-button 
-          class="custom-button" 
-          :class="{ 'selected-button': sort === 'top' }" 
-          @click="sort = 'top'; getPosts()"
-        >Top</el-button>
-        <el-button 
-          class="custom-button" 
-          :class="{ 'selected-button': sort === 'newest' }" 
-          @click="sort = 'newest'; getPosts()"
-        >Newest</el-button>
-        <el-button 
-          class="custom-button" 
-          :class="{ 'selected-button': sort === 'commented' }" 
-          @click="sort = 'commented'; getPosts()"
-        >Commented</el-button>
-      </el-col>
-      <el-col :span="12" style="text-align: right;margin: -10px 0;">
-        <el-button 
-          class="custom-button" 
-          :class="{ 'selected-button': filter === 'all' }" 
-          @click="filter = 'all'; getPosts()"
-        >All</el-button>
-        <el-button 
-          class="custom-button" 
-          :class="{ 'selected-button': filter === 'links' }" 
-          @click="filter = 'links'; getPosts()"
-        >Links</el-button>
-        <el-button 
-          class="custom-button" 
-          :class="{ 'selected-button': filter === 'threads' }" 
-          @click="filter = 'threads'; getPosts()"
-        >Threads</el-button>
-      </el-col>
-    </el-row>
-  </el-card>
-  <PostComponent v-for="post in posts" :key="post.id" :post="post" @updatePost="updatePost" @deletePost="deletePost"></PostComponent>
-</div>  
+    <PostComponent v-for="post in posts" :key="post.id" :post="post" @updatePost="updatePost" @deletePost="deletePost"></PostComponent>
+  </div>
+
 </template>
 
 <script>
@@ -68,7 +69,7 @@ import PostComponent from '@/components/PostComponent.vue'
 import posts from '@/services/posts';
 import magazine from '@/services/magazines';
 import {ElLoading} from "element-plus";
-import { ElMessage } from 'element-plus'; // for Vue 3
+import { ElMessage } from 'element-plus';
 
 
 export default {
@@ -77,42 +78,52 @@ export default {
     PostComponent
   },
   props: {
-    magazine_id: String, default: '', required: false,
-    showSearchBar: Boolean, default: false, required: false
+    magazine_id: {
+      type:String, default: '', required: false,
+    },
+    showSearchBar: {
+      type:Boolean, default: false, required: false
+    },
   },
   data() {
     return {
       posts: [],
       filter: 'all',
       sort: 'top',
+      search: '',
+      apareceLista: true,
     }
   },
-
   methods: {
     async getPosts() {
-      const loadingFS = ElLoading.service({ fullscreen: true, text: 'Loading', background: 'rgba(255,255,255,0.7)' });
+      const loadingFS = ElLoading.service({fullscreen: true, text: 'Loading', background: 'rgba(255,255,255,0.7)'});
       let response = "";
-      if (this.magazine_id === '' || this.magazine_id === undefined) response = await posts.list(this.filter, this.sort);
+      if (this.magazine_id === '' || this.magazine_id === undefined) response = await posts.list(this.filter, this.sort, this.search);
       else response = await magazine.posts(this.magazine_id, this.filter, this.sort);
       if (response.status === 200) {
         this.posts = response.data;
-      }
-      else ElMessage.error('Error retrieving posts');
+      } else ElMessage.error('Error retrieving posts');
       loadingFS.close();
     },
     async updatePost(newPost) {
-        const index = this.posts.findIndex(post => post.id === newPost.id);
-        if (index !== -1) {
-            this.posts[index] = newPost;
-        }
+      const index = this.posts.findIndex(post => post.id === newPost.id);
+      if (index !== -1) {
+        this.posts[index] = newPost;
+      }
     },
     async deletePost() {
       await this.getPosts();
     },
+    mostraLlista() {
+      this.apareceLista = true;
+    },
+    amagaLlista() {
+      if (this.showSearchBar) this.apareceLista = false;
+    }
   },
-  async mounted() {
-    await this.getPosts()
-  }
+    async mounted() {
+      await this.getPosts()
+    },
 }
 </script>
 
@@ -130,7 +141,6 @@ export default {
   padding: 20px 200px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  margin-left: 20px;
-  margin-right: 20px;
+  margin: 20px;
 }
 </style>

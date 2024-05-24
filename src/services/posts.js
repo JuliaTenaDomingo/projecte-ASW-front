@@ -1,8 +1,8 @@
 import axios from "@/services/backend"
 
 export default {
-    async list(type, sort) {
-        return await axios.get(`/posts?sort=${sort}&type=${type}`)
+    async list(type, sort, search) {
+        return await axios.get(`/posts?sort=${sort}&type=${type}&search=${search}`)
     },
     async retrieve(id) {
         return await axios.get(`/posts/${id}`)
