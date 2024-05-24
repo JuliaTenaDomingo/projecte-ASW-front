@@ -2,7 +2,7 @@
   <div id="app">
     <NavBar @toggleSearchBar="toggleSearchBar"/>
     <el-alert v-if="!hasSelectedUser" title="You need to select a user to use this application" type="error" show-icon></el-alert>
-    <router-view v-if="hasSelectedUser" :showSearchBar="showSearchBar"></router-view>
+    <router-view v-if="hasSelectedUser" :key="componentKey" :showSearchBar="showSearchBar"></router-view>
   </div>
 </template>
 

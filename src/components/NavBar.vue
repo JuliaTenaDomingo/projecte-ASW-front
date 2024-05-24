@@ -11,7 +11,7 @@
 
       <div class="flex-grow" />
 
-      <el-menu-item index="6" @click="toggleSearchBar">
+      <el-menu-item index="6">
           <template #title>
               <el-icon>
                   <Search />
@@ -71,7 +71,7 @@ export default {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
       this.activeIndex = key;
-      if (key === '1' || key === '0' || key === '6') {
+      if (key === '1' || key === '0') {
         this.$router.push({ name: 'Posts' });
         this.$emit('toggleSearchBar', false);
       } else if (key === '2') {
@@ -84,6 +84,10 @@ export default {
         this.$router.push({ name: 'NewLink' });
       } else if (key === '4-3') {
         this.$router.push({ name: 'NewMagazine' });
+      }
+      else if (key === '6'){
+        this.$router.push({ name: 'Posts' });
+        this.$emit('toggleSearchBar', true);
       }
     },
     selectUser(userId) {
@@ -108,9 +112,6 @@ export default {
       if (user) {
         this.$router.push({ path: `/users/${user.userId}/edit` });
       }
-    },
-    toggleSearchBar() {
-      this.$emit('toggleSearchBar', true);
     },
   }
 };
