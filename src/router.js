@@ -4,6 +4,7 @@ import Post from '@/views/Post.vue'
 import Magazines from '@/views/Magazines.vue'
 import Magazine from '@/views/Magazine.vue'
 import User from '@/views/User.vue'
+import EditUser from '@/views/EditUser.vue'
 import EditPost from '@/views/EditPost.vue'
 import NewMagazine from "@/views/NewMagazine.vue";
 import NewPost from "@/views/NewPost.vue";
@@ -16,6 +17,7 @@ const routes = [
   {path: '/magazines/new', name: 'NewMagazine', component: NewMagazine},
   {path: '/magazines/:magazine_id', name: 'Magazine', component: Magazine},
   {path: '/users/:user_id', name: 'User', component: User},
+  {path: '/users/:user_id/edit', name: 'EditUser', component: EditUser},
   {path: '/posts/:post_id/edit', name: 'EditPost', component: EditPost},
 ]
 

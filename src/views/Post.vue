@@ -2,6 +2,7 @@
   <PostComponent
     :key="post.id"
     :post="post"
+    :showBody="true"
     @updatePost="updatePost"
     @deletePost="deletePost">
   </PostComponent>

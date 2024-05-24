@@ -43,4 +43,20 @@ export default {
 body {
   font-family: 'Roboto', sans-serif;
 }
+.defaultButton {
+  color: #0F0142;
+}
+.defaultButton:hover {
+  color: #0F0142;
+  background-color: #EDE7F6;
+  border-color:  #0F0142;
+}
+.newdefaultButton {
+  color: #0F0142;
+}
+.newdefaultButton:hover {
+  color: white;
+  background-color: #0F0142;
+  border-color:  #0F0142;
+}
 </style>

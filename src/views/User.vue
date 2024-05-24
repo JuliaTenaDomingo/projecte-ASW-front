@@ -4,7 +4,6 @@
       <el-image
         v-if="user.cover"
         :src="user.cover"
-        width="100%"
         class="cover"
         :alt="user.username"
       ></el-image>
@@ -22,21 +21,19 @@
       <h2>@{{ user.username }}</h2>
       <p>{{ user.description }}</p>
     </div>
-    <div class="tabs custom-tabs" style="margin-right: 21px; margin-left: 21px">
-      <el-tabs v-model="activeTab" @tab-click="fetchData">
-        <el-tab-pane label="All" name="all"></el-tab-pane>
-        <el-tab-pane :label="'Posts (' + posts.length + ')'" name="posts"></el-tab-pane>
-        <el-tab-pane :label="'Comments (' + comments.length + ')'" name="comments"></el-tab-pane>
-        <el-tab-pane v-if="isCurrentUser" :label="'Boosts (' + boosts.length + ')'" name="boosts"></el-tab-pane>
-      </el-tabs>
-    </div>
-    <div v-if="activeTab === 'all'">
-      <div v-for="post in uniqueAllPosts" :key="post.id">
-        <PostComponent :post="post" @updatePost="updatePost" ></PostComponent>
-      </div>
-      <div v-for="comment in comments" :key="comment.id">
-        <CommentComponent :comment="comment"></CommentComponent>
-      </div>
+    <div class="tabs custom-tabs">
+      <el-card class="box-card" shadow="hover" style="margin: 20px; height: 50px;" :style="{ background: '#0F0142' }">
+        <el-row>
+          <el-col :span="12" style="margin: -10px 0;">
+            <el-button class="custom-button" :class="{ 'selected-button': activeTab === 'posts' }"
+              @click="activeTab = 'posts'; fetchData()">Posts ({{ posts.length }})</el-button>
+            <el-button class="custom-button" :class="{ 'selected-button': activeTab === 'comments' }"
+              @click="activeTab = 'comments'; fetchData()">Comments ({{ comments.length }})</el-button>
+            <el-button v-if="isCurrentUser" class="custom-button" :class="{ 'selected-button': activeTab === 'boosts' }"
+              @click="activeTab = 'boosts'; fetchData()">Boosts ({{ boosts.length }})</el-button>
+          </el-col>
+        </el-row>
+      </el-card>
     </div>
     <div v-if="activeTab === 'posts'" class="posts">
       <PostComponent v-for="post in posts" :key="post.id" :post="post" @updatePost="updatePost" @editComment="editComment" ></PostComponent>
@@ -76,7 +73,7 @@ export default {
       boosts: [],
       commentToEdit: null,
       commentToReply: null,
-      activeTab: 'all',
+      activeTab: 'posts',
       rules: {
         username: [
           { required: true, message: 'Username is required', trigger: 'blur' }
@@ -92,17 +89,6 @@ export default {
     isCurrentUser() {
       return this.selectedUser && this.selectedUser.userId === this.$route.params.user_id;
     },
-    uniqueAllPosts() {
-      const allPosts = [...this.posts, ...this.boosts];
-      const postIds = new Set();
-      return allPosts.filter(post => {
-        if (!postIds.has(post.id)) {
-          postIds.add(post.id);
-          return true;
-        }
-        return false;
-      });
-    }
   },
   watch: {
     '$route.params.user_id': {
@@ -129,20 +115,9 @@ export default {
       }
     },
     async fetchData() {
-      if (this.activeTab === 'all') {
-        await this.fetchPosts();
-        await this.fetchComments();
-
-        if (this.isCurrentUser) {
-          await this.fetchBoosts();
-        }
-      } else if (this.activeTab === 'posts') {
-        await this.fetchPosts();
-      } else if (this.activeTab === 'comments') {
-        await this.fetchComments();
-      } else if (this.activeTab === 'boosts') {
-        await this.fetchBoosts();
-      }
+      await this.fetchPosts();
+      await this.fetchComments();
+      await this.fetchBoosts();
     },
     async fetchPosts() {
       try {
@@ -211,12 +186,7 @@ export default {
 .with-cover {
   position: relative;
 }
-.cover {
-  display: block;
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
+
 .cover-placeholder {
   width: 100%;
   height: 200px;
@@ -260,5 +230,22 @@ export default {
 }
 .el-tabs__item {
   font-size: 20px !important;
+}
+
+.custom-button {
+  background-color: transparent;
+  color: white;
+  border: none;
+}
+.selected-button {
+  background-color: white;
+  color: #0F0142;
+}
+.cover {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  max-height: 200px;
+  object-fit: cover;
 }
 </style>

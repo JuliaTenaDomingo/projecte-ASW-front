@@ -4,7 +4,7 @@
               <el-col :xl="2" :lg="2" :md="2" :sm="3" :xs="4">
                   <el-row>
                       <el-col>
-                          <el-button v-if="!magazine.current_user_subscribed" style="color:#0F0142" @click="subscribe()" size="large"><el-icon><User /></el-icon><el-icon><Plus/></el-icon>{{ magazine.subscribers_count }}</el-button>
+                          <el-button v-if="!magazine.current_user_subscribed" class="defaultButton" @click="subscribe()" size="large"><el-icon><User /></el-icon><el-icon><Plus/></el-icon>{{ magazine.subscribers_count }}</el-button>
                           <el-button v-else @click="unsubscribe()" style="background-color:#0f0142; color: white" size="large"><el-icon><UserFilled /></el-icon><el-icon><Plus /></el-icon>{{ magazine.subscribers_count }}</el-button>
                       </el-col>
                   </el-row>
