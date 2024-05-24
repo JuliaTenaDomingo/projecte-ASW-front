@@ -30,14 +30,6 @@
       <el-menu-item @click="navigateToAddMagazine">Create new magazine</el-menu-item>
     </el-sub-menu>
 
-    <el-menu-item index="6">
-      <template #title>
-        <el-icon>
-          <Search />
-        </el-icon>
-      </template>
-    </el-menu-item>
-
       <el-menu-item index="3" @click="handleProfileClick">{{ profileText }}</el-menu-item>
 
       <el-sub-menu index="5">

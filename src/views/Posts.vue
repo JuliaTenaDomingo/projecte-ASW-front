@@ -135,7 +135,6 @@ export default {
   color: white;
   border: none;
 }
-
 .selected-button {
   background-color: white;
   color: #0F0142;
