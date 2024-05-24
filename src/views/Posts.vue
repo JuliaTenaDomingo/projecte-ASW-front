@@ -54,7 +54,6 @@ import magazine from '@/services/magazines';
 import { ElLoading } from "element-plus";
 import { ElMessage } from 'element-plus';
 
-
 export default {
   name: 'Posts',
   components: {
