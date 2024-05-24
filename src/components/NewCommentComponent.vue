@@ -37,10 +37,11 @@ export default {
   },
   methods: {
     async createComment() {
-      const postId = this.$route.params.post_id;
+      let postId = null;
       let comment_id = null;
       if (this.commentToReply) {
         comment_id = this.commentToReply.id;
+        postId = this.commentToReply.post_id;
       } else if (this.commentToEdit && this.commentToEdit.comment_id) {
         comment_id = this.commentToEdit.comment_id;
       }
@@ -51,8 +52,12 @@ export default {
       };
       let response;
       if (this.commentId) {
+        postId = this.commentToEdit.post_id;
         response = await comments.editComment(postId, this.commentId, comment);
       } else {
+        if (this.$route.params.post_id) {
+          postId = this.$route.params.post_id;
+        }
         response = await comments.createComment(postId, comment);
       }
       if (response.status === 201) {

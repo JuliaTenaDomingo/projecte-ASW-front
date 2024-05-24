@@ -5,8 +5,10 @@
         <el-row style="margin-bottom: 30px; height: 15px;">
           <el-col >
             <el-button style="color:#0F0142; font-size: medium; font-weight: bold;" @click="goToUser()"
-                       :link="true">{{ comment.user_name }}</el-button>
+                       :link="true">{{ comment.user_name }}
+            </el-button>
             <el-text style="font-size: small;">, {{ timeAgo(comment.created_at) }}</el-text>
+            <el-button v-if="showParent" style="font-size: small;" :link="true" @click="goToPost">, ( PARENT )</el-button>
           </el-col>
         </el-row>
         <el-row style="margin-bottom: 5px; height: 30px;">
@@ -85,6 +87,10 @@ export default {
     commentToReply: {
       type: Object,
       default: null
+    },
+    showParent: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -101,6 +107,9 @@ export default {
     },
     async goToUser() {
       this.$router.push({ name: 'User', params: { user_id: this.comment.user_id } });
+    },
+    goToPost() {
+      this.$router.push({ name: 'Post', params: { post_id: this.comment.post_id } });
     },
 
     //Edit comment
@@ -126,9 +135,11 @@ export default {
 
     //Delete comment
     async deleteComment() {
-      const response = await comments.removeComment(this.$route.params.post_id, this.comment.id);
+      const response = await comments.removeComment(this.comment.post_id, this.comment.id);
+
       if (response.status === 200 || response.status === 204) {
         this.$emit('commentDeleted', this.comment.id);
+        this.$emit('updateComment');
         ElMessage.success('Comment successfully deleted');
       } else {
         console.error('Error deleting comment. Status:', response.status, 'Response data:', response.data);
@@ -158,7 +169,7 @@ export default {
 
     //Reactions
     async like() {
-      const response = await comments.likeComment(this.$route.params.post_id, this.comment.id);
+      const response = await comments.likeComment(this.comment.post_id, this.comment.id);
       if (response.status === 200) {
         this.$emit('updateComment', response.data);
         ElMessage.success('Comment successfully liked');
@@ -166,7 +177,7 @@ export default {
       else ElMessage.error('Error liking comment');
     },
     async unlike() {
-      const response = await comments.unlikeComment(this.$route.params.post_id, this.comment.id);
+      const response = await comments.unlikeComment(this.comment.post_id, this.comment.id);
       if (response.status === 200) {
         this.$emit('updateComment', response.data);
         ElMessage.success('Comment successfully unliked');
@@ -174,7 +185,7 @@ export default {
       else ElMessage.error('Error unliking comment');
     },
     async dislike() {
-      const response = await comments.dislikeComment(this.$route.params.post_id, this.comment.id);
+      const response = await comments.dislikeComment(this.comment.post_id, this.comment.id);
       if (response.status === 200) {
         this.$emit('updateComment', response.data);
         ElMessage.success('Comment successfully disliked');
@@ -182,7 +193,7 @@ export default {
       else ElMessage.error('Error disliking comment');
     },
     async undislike() {
-      const response = await comments.undislikeComment(this.$route.params.post_id, this.comment.id);
+      const response = await comments.undislikeComment(this.comment.post_id, this.comment.id);
       if (response.status === 200) {
         this.$emit('updateComment', response.data);
         ElMessage.success('Comment successfully undisliked');
