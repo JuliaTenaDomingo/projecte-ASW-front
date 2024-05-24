@@ -100,20 +100,25 @@ export default {
         if (valid) {
           try {
             let response;
+            //Editing post
             if (this.form.id) {
-              console.log('Editing post')
               const { title, url, body, magazine_id } = this.form;
               const post = { title, url, body, magazine_id };
-              console.log(post);
               response = await posts.edit(this.form.id, post);
-            } else {
-              console.log('Creating post')
-              console.log(this.form);
+            }
+            //Creating new post
+            else {
               response = await posts.create(this.form);
             }
+
             this.resetForm();
-            ElMessage.success('Successfully created post!');
-            this.$router.push({ name: 'Posts' });
+
+            if (response.status === 201) {
+              ElMessage.success('Post successfully created');
+              this.$router.push({ name: 'Posts' });
+            } else {
+              ElMessage.error('An unexpected error occurred.');
+            }
           } catch (error) {
             console.error('Error submitting form:', error);
           }

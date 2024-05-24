@@ -15,6 +15,7 @@
 
 <script>
 import comments from "@/services/comments.js";
+import {ElMessage} from "element-plus";
 
 export default {
   name: 'NewCommentComponent',
@@ -57,9 +58,12 @@ export default {
       if (response.status === 201) {
         this.newComment = '';
         this.$emit('commentCreated');
+        ElMessage.success('Comment successfully created');
       } else if (response.status === 200) {
         this.$emit('updateComment', response.data);
+        ElMessage.success('Comment successfully edited');
       } else {
+        ElMessage.success('Error creating or updating comment');
         console.error('Error creating or updating comment. Status:', response.status, 'Response data:', response.data);
       }
     },
