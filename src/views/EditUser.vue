@@ -4,7 +4,6 @@
       <el-image
         v-if="user.cover"
         :src="user.cover"
-        width="100%"
         class="cover"
         :alt="user.username"
       ></el-image>
@@ -21,15 +20,14 @@
     <div class="user-main" id="content">
         <h2>@{{ user.username }}</h2>
         <p>{{ user.description }}</p>
-        <p><strong>API Key:</strong> {{ user.apiKey }}</p>
     </div>
     <div class="user-form">
-      <el-form ref="form" :model="user" label-width="120px" :rules="rules">
+      <el-form ref="form" :model="form" label-width="120px" :rules="rules">
         <el-form-item label="Username" prop="username">
-          <el-input v-model="user.username"></el-input>
+          <el-input v-model="form.username"></el-input>
         </el-form-item>
         <el-form-item label="Description" prop="description">
-          <el-input type="textarea" v-model="user.description"></el-input>
+          <el-input type="textarea" v-model="form.description"></el-input>
         </el-form-item>
         <el-form-item label="Avatar" prop="avatar">
           <el-upload
@@ -52,7 +50,9 @@
           </el-upload>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="updateProfile">Update Profile</el-button>
+          <div class="button-container">
+            <el-button type="primary" @click="updateProfile" class="custom-button">Update Profile</el-button>
+          </div>
         </el-form-item>
       </el-form>
     </div>
@@ -68,6 +68,7 @@ export default {
   data() {
     return {
       user: {},
+      form: {},
       rules: {
         username: [
           { required: true, message: 'Username is required', trigger: 'blur' }
@@ -101,6 +102,7 @@ export default {
         const response = await users.retrieve(userId);
         if (response.status === 200) {
           this.user = response.data;
+          this.form = { ...this.user };
         } else {
           console.error('Failed to fetch user:', response.status);
         }
@@ -110,20 +112,21 @@ export default {
     },
     updateRoute(userId) {
       if (this.$route.params.userId !== userId.toString()) {
-        this.$router.push({ path: `/users/${userId}` });
+        this.$router.push({ path: `/users/${userId}/edit` });
       }
     },
     handleAvatarChange(file) {
-      this.user.avatar = URL.createObjectURL(file.raw);
+      this.form.avatar = URL.createObjectURL(file.raw);
     },
     handleCoverChange(file) {
-      this.user.cover = URL.createObjectURL(file.raw);
+      this.form.cover = URL.createObjectURL(file.raw);
     },
-    async updateProfile() {
+   async updateProfile() {
       try {
-        const response = await users.update(this.user.userId, this.user);
+        const response = await users.update(this.$route.params.user_id, this.form);
         if (response.status === 200) {
           this.$message.success('Profile updated successfully');
+          this.$router.push({ name: 'User', params: { user_id: this.$route.params.user_id } });
         } else {
           this.$message.error('Failed to update profile');
         }
@@ -142,7 +145,8 @@ export default {
 .cover {
   display: block;
   width: 100%;
-  height: 200px;
+  overflow: hidden;
+  max-height: 200px;
   object-fit: cover;
 }
 .cover-placeholder {
@@ -179,5 +183,17 @@ export default {
   padding: 20px;
   max-width: 600px;
   margin: 0 auto;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.custom-button {
+  background-color: #0F0142 !important;
+  border-color: #0F0142 !important;
+  color: white !important;
 }
 </style>
