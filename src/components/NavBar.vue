@@ -1,6 +1,6 @@
 <template>
     <el-menu :default-active="activeIndex" :ellipsis="false" background-color="#0F0142" text-color="#fff"
-        active-text-color="#fff" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+        active-text-color="#fff" class="el-menu-demo" mode="horizontal" @select="handleSelect" style="border-bottom: 0">
         <el-menu-item index="0">
         <h2 style="color: white;">Tuiter</h2>
         </el-menu-item>
@@ -30,11 +30,17 @@
       <el-menu-item @click="navigateToAddMagazine">Create new magazine</el-menu-item>
     </el-sub-menu>
 
-      <el-menu-item index="3" @click="handleProfileClick">{{ profileText }}</el-menu-item>
+    <el-sub-menu v-if="hasSelectedUser" index="3">
+      <template #title>
+        {{ profile }}
+      </template>
+      <el-menu-item @click="navigateToProfile">View Profile</el-menu-item>
+      <el-menu-item @click="navigateToEditProfile">Edit Profile</el-menu-item>
+    </el-sub-menu>
 
       <el-sub-menu index="5">
           <template #title>Users</template>
-          <el-menu-item index="5-1" @click="selectUser(11)">Miquel</el-menu-item>
+          <el-menu-item index="5-1" @click="selectUser(11)" >Miquel</el-menu-item>
           <el-menu-item index="5-2" @click="selectUser(13)">Alba</el-menu-item>
           <el-menu-item index="5-3" @click="selectUser(12)">Júlia</el-menu-item>
           <el-menu-item index="5-4" @click="selectUser(18)">Agus</el-menu-item>
@@ -66,7 +72,13 @@ export default {
     return { activeIndex, router };
   },
   computed: {
-    ...mapGetters(['profileText'])
+    ...mapGetters(['profileText', 'selectedUser']),
+    hasSelectedUser() {
+      return this.selectedUser !== null;
+    },
+    profile() {
+      return this.selectedUser ? this.selectedUser.userName : 'Profile';
+    }
   },
   methods: {
     ...mapMutations(['selectUser']),
@@ -124,6 +136,7 @@ export default {
     navigateToAddMagazine() {
       this.$router.push({ name: 'NewMagazine' });
     }
+
   }
 };
 </script>

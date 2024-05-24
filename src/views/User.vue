@@ -4,7 +4,6 @@
       <el-image
         v-if="user.cover"
         :src="user.cover"
-        width="100%"
         class="cover"
         :alt="user.username"
       ></el-image>
@@ -169,12 +168,7 @@ export default {
 .with-cover {
   position: relative;
 }
-.cover {
-  display: block;
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
+
 .cover-placeholder {
   width: 100%;
   height: 200px;
@@ -228,5 +222,12 @@ export default {
 .selected-button {
   background-color: white;
   color: #0F0142;
+}
+.cover {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  max-height: 200px;
+  object-fit: cover;
 }
 </style>
