@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <NavBar />
+    <NavBar @toggleSearchBar="toggleSearchBar"/>
     <el-alert v-if="!hasSelectedUser" title="You need to select a user to use this application" type="error" show-icon></el-alert>
-    <router-view v-if="hasSelectedUser"></router-view>
+    <router-view v-if="hasSelectedUser" :key="componentKey" :showSearchBar="showSearchBar"></router-view>
   </div>
 </template>
 
@@ -16,6 +16,11 @@ export default {
   components: {
     NavBar
   },
+  data() {
+    return {
+      showSearchBar: false,
+    }
+  },
   computed: {
     ...mapGetters(['selectedUser']),
     hasSelectedUser() {
@@ -24,6 +29,9 @@ export default {
   },
   methods: {
     ...mapMutations(['initializeUser']),
+   toggleSearchBar(show) {
+     this.showSearchBar = show;
+   },
   },
   mounted() {
     this.initializeUser(); // Inicializar el usuario seleccionado desde localStorage

@@ -1,16 +1,23 @@
 <template>
-  <el-menu :default-active="activeIndex" :ellipsis="false" background-color="#0F0142" text-color="#fff"
-    active-text-color="#fff" class="el-menu-demo" mode="horizontal" @select="handleSelect" style="border-bottom: 0">
-    <el-menu-item index="0">
-      <h2 style="color: white;">Tuiter</h2>
-    </el-menu-item>
+    <el-menu :default-active="activeIndex" :ellipsis="false" background-color="#0F0142" text-color="#fff"
+        active-text-color="#fff" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+        <el-menu-item index="0">
+        <h2 style="color: white;">Tuiter</h2>
+        </el-menu-item>
+      <div class="flex-grow" />
 
-    <div class="flex-grow" />
+      <el-menu-item index="1">Posts</el-menu-item>
+      <el-menu-item index="2">Magazines</el-menu-item>
 
-    <el-menu-item index="1">Posts</el-menu-item>
-    <el-menu-item index="2">Magazines</el-menu-item>
+      <div class="flex-grow" />
 
-    <div class="flex-grow" />
+      <el-menu-item index="6">
+          <template #title>
+              <el-icon>
+                  <Search />
+              </el-icon>
+          </template>
+      </el-menu-item>
 
     <el-sub-menu index="4">
       <template #title>
@@ -31,21 +38,15 @@
       </template>
     </el-menu-item>
 
-    <el-sub-menu v-if="hasSelectedUser" index="3">
-      <template #title>
-        {{ profile }}
-      </template>
-      <el-menu-item @click="navigateToProfile">View Profile</el-menu-item>
-      <el-menu-item @click="navigateToEditProfile">Edit Profile</el-menu-item>
-    </el-sub-menu>
+      <el-menu-item index="3" @click="handleProfileClick">{{ profileText }}</el-menu-item>
 
-    <el-sub-menu index="5">
-      <template #title>Users</template>
-      <el-menu-item index="5-1" @click="selectUser(11)">Miquel</el-menu-item>
-      <el-menu-item index="5-2" @click="selectUser(13)">Alba</el-menu-item>
-      <el-menu-item index="5-3" @click="selectUser(12)">Júlia</el-menu-item>
-      <el-menu-item index="5-4" @click="selectUser(18)">Agus</el-menu-item>
-    </el-sub-menu>
+      <el-sub-menu index="5">
+          <template #title>Users</template>
+          <el-menu-item index="5-1" @click="selectUser(11)">Miquel</el-menu-item>
+          <el-menu-item index="5-2" @click="selectUser(13)">Alba</el-menu-item>
+          <el-menu-item index="5-3" @click="selectUser(12)">Júlia</el-menu-item>
+          <el-menu-item index="5-4" @click="selectUser(18)">Agus</el-menu-item>
+      </el-sub-menu>
   </el-menu>
 </template>
 
@@ -73,20 +74,16 @@ export default {
     return { activeIndex, router };
   },
   computed: {
-    ...mapGetters(['profileText', 'selectedUser']),
-    hasSelectedUser() {
-      return this.selectedUser !== null;
-    },
-    profile() {
-      return this.selectedUser ? this.selectedUser.userName : 'Profile';
-    }
+    ...mapGetters(['profileText'])
   },
   methods: {
     ...mapMutations(['selectUser']),
     handleSelect(key, keyPath) {
+      console.log(key, keyPath);
       this.activeIndex = key;
-      if (key === '1' || key === '0' || key === '6') {
+      if (key === '1' || key === '0') {
         this.$router.push({ name: 'Posts' });
+        this.$emit('toggleSearchBar', false);
       } else if (key === '2') {
         this.$router.push({ name: 'Magazines' });
       } else if (key === '3') {
@@ -98,12 +95,16 @@ export default {
       } else if (key === '4-3') {
         this.$router.push({ name: 'NewMagazine' });
       }
+      else if (key === '6'){
+        this.$router.push({ name: 'Posts' });
+        this.$emit('toggleSearchBar', true);
+      }
     },
     selectUser(userId) {
-      this.$store.commit('selectUser', { userId });
+      this.$store.commit('selectUser', { userId }); // Aquí corregimos la llamada a la mutación
     },
     handleProfileClick() {
-      const user = this.selectedUser;
+      const user = this.$store.getters.selectedUser;
       if (user) {
         this.$router.push({ path: `/users/${user.userId}` });
       } else {
