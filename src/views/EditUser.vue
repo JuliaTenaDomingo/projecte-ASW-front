@@ -64,6 +64,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import users from '@/services/users';
+import { ElLoading } from 'element-plus';
 
 export default {
   name: 'EditUser',
@@ -99,6 +100,7 @@ export default {
   },
   methods: {
     async fetchUser(userId) {
+      const loadingFS = ElLoading.service({ fullscreen: true, text: 'Loading', background: 'rgba(255,255,255,0.7)' });
       try {
         const response = await users.retrieve(userId);
         if (response.status === 200) {
@@ -115,6 +117,7 @@ export default {
       } catch (error) {
         console.error('Failed to fetch user:', error);
       }
+      loadingFS.close();
     },
     updateRoute(userId) {
       if (this.$route.params.userId !== userId.toString()) {
@@ -138,6 +141,7 @@ export default {
       this.form.cover = null;
     },
     async updateProfile() {
+      const loadingFS = ElLoading.service({ fullscreen: true, text: 'Loading', background: 'rgba(255,255,255,0.7)' });
       try {
         const formData = new FormData();
         formData.append('username', this.form.username);
@@ -158,6 +162,7 @@ export default {
       } catch (error) {
         this.$message.error('Failed to update profile');
       }
+      loadingFS.close();
     }
   }
 };

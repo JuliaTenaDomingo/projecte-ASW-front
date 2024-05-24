@@ -58,6 +58,7 @@ import users from '@/services/users';
 import posts from '@/services/posts';
 import PostComponent from '@/components/PostComponent.vue';
 import CommentComponent from '@/components/CommentComponent.vue';
+import { ElLoading } from 'element-plus';
 
 export default {
   name: 'User',
@@ -115,11 +116,13 @@ export default {
       }
     },
     async fetchData() {
+      const loadingFS = ElLoading.service({ fullscreen: true, text: 'Loading', background: 'rgba(255,255,255,0.7)' });
       await this.fetchPosts();
       await this.fetchComments();
        if (this.isCurrentUser) {
           await this.fetchBoosts();
         }
+      loadingFS.close();
     },
     async fetchPosts() {
       try {
@@ -243,9 +246,12 @@ export default {
   color: #0F0142;
 }
 .cover {
-  display: block;
+  display: flex;
   width: 100%;
-  height: 200px; /* Altura fija */
+  max-height: 200px; /* Altura fija */
   object-fit: cover; /* Mantener proporción sin deformarse */
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
 }
 </style>
