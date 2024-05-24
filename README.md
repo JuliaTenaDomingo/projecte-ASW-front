@@ -1,19 +1,16 @@
-# tuiter-front
+## PROJECTE ASW
 
-## Project Setup
+Students:
 
-```sh
-npm install
-```
+* Amorín Díaz, Miquel
 
-### Compile and Hot-Reload for Development
+* Costabella Moreno, Agustí
+  
+* López Ruiz, Alba
 
-```sh
-npm run dev
-```
+* Tena Domingo, Júlia
 
-### Compile and Minify for Production
 
-```sh
-npm run build
-```
+Webapp deployed: <https://tuiter-front.fly.dev>
+
+Taiga project: <https://tree.taiga.io/project/albalr-asw-1/timeline/>
