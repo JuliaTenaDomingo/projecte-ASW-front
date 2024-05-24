@@ -7,8 +7,13 @@ export default {
     async retrieve(userId) {
         return await axios.get(`/users/${userId}`)
     },
-    async update(userId, userData) {
-        return await axios.put(`/users/${userId}`, userData)
+    async update(userId, formData) {
+        return await axios.put(`/users/${userId}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            responseType: 'json'
+        });
     },
     async listComments(userId, sort) {
         return await axios.get(`/users/${userId}/comments?sort=${sort}`)

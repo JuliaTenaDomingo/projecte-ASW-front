@@ -18,8 +18,8 @@
       </div>
     </div>
     <div class="user-main" id="content">
-        <h2>@{{ user.username }}</h2>
-        <p>{{ user.description }}</p>
+      <h2>@{{ user.username }}</h2>
+      <p>{{ user.description }}</p>
     </div>
     <div class="user-form">
       <el-form ref="form" :model="form" label-width="120px" :rules="rules">
@@ -31,20 +31,22 @@
         </el-form-item>
         <el-form-item label="Avatar" prop="avatar">
           <el-upload
-            action="/upload/avatar"
             list-type="picture"
             :auto-upload="false"
             :on-change="handleAvatarChange"
+            :on-remove="handleAvatarRemove"
+            limit="1"
           >
             <el-button>Choose file</el-button>
           </el-upload>
         </el-form-item>
         <el-form-item label="Cover" prop="cover">
           <el-upload
-            action="/upload/cover"
             list-type="picture"
             :auto-upload="false"
             :on-change="handleCoverChange"
+            :on-remove="handleCoverRemove"
+            limit="1"
           >
             <el-button>Choose file</el-button>
           </el-upload>
@@ -64,19 +66,18 @@ import { mapGetters } from 'vuex';
 import users from '@/services/users';
 
 export default {
-  name: 'User',
+  name: 'EditUser',
   data() {
     return {
       user: {},
-      form: {},
-      rules: {
-        username: [
-          { required: true, message: 'Username is required', trigger: 'blur' }
-        ],
-        description: [
-          { required: true, message: 'Description is required', trigger: 'blur' }
-        ]
-      }
+      form: {
+        username: '',
+        description: '',
+        avatar: null,
+        cover: null,
+      },
+      avatarFile: null,
+      coverFile: null,
     };
   },
   computed: {
@@ -94,7 +95,7 @@ export default {
     }
   },
   async mounted() {
-    await this.fetchUser(this.$route.params.userId);
+    await this.fetchUser(this.$route.params.user_id);
   },
   methods: {
     async fetchUser(userId) {
@@ -102,7 +103,12 @@ export default {
         const response = await users.retrieve(userId);
         if (response.status === 200) {
           this.user = response.data;
-          this.form = { ...this.user };
+          this.form = {
+            username: this.user.username,
+            description: this.user.description,
+            avatar: null,
+            cover: null,
+          };
         } else {
           console.error('Failed to fetch user:', response.status);
         }
@@ -116,14 +122,33 @@ export default {
       }
     },
     handleAvatarChange(file) {
-      this.form.avatar = URL.createObjectURL(file.raw);
+      this.avatarFile = file.raw;
+      this.form.avatar = file.raw; // Añadir el archivo al formulario
     },
     handleCoverChange(file) {
-      this.form.cover = URL.createObjectURL(file.raw);
+      this.coverFile = file.raw;
+      this.form.cover = file.raw; // Añadir el archivo al formulario
     },
-   async updateProfile() {
+    handleAvatarRemove() {
+      this.avatarFile = null;
+      this.form.avatar = null;
+    },
+    handleCoverRemove() {
+      this.coverFile = null;
+      this.form.cover = null;
+    },
+    async updateProfile() {
       try {
-        const response = await users.update(this.$route.params.user_id, this.form);
+        const formData = new FormData();
+        formData.append('username', this.form.username);
+        formData.append('description', this.form.description);
+        if (this.avatarFile) {
+          formData.append('avatar', this.avatarFile);
+        }
+        if (this.coverFile) {
+          formData.append('cover', this.coverFile);
+        }
+        const response = await users.update(this.$route.params.user_id, formData);
         if (response.status === 200) {
           this.$message.success('Profile updated successfully');
           this.$router.push({ name: 'User', params: { user_id: this.$route.params.user_id } });
@@ -145,8 +170,7 @@ export default {
 .cover {
   display: block;
   width: 100%;
-  overflow: hidden;
-  max-height: 200px;
+  height: 200px;
   object-fit: cover;
 }
 .cover-placeholder {
@@ -184,16 +208,15 @@ export default {
   max-width: 600px;
   margin: 0 auto;
 }
-
 .button-container {
   display: flex;
   justify-content: flex-end;
   width: 100%;
 }
-
 .custom-button {
   background-color: #0F0142 !important;
   border-color: #0F0142 !important;
   color: white !important;
 }
 </style>
+
