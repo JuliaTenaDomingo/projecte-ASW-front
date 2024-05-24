@@ -41,7 +41,7 @@
       <br>
       <el-form-item>
         <div class="button-container">
-          <el-button type="primary" @click="handleSubmit" class="custom-button">Add new magazine</el-button>
+          <el-button @click="handleSubmit" class="newdefaultButton">Add new magazine</el-button>
         </div>
       </el-form-item>
     </el-form>

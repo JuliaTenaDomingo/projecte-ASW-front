@@ -8,7 +8,7 @@
         placeholder="Write a new comment here"
         v-model="newComment"
     ></el-input>
-    <el-button style="margin-top: 20px;" @click="createComment()">
+    <el-button class="defaultButton" style="margin-top: 20px;" @click="createComment()">
       {{ commentId ? 'Update Comment' : 'Add Comment' }}
     </el-button>  </el-card>
 </template>

@@ -18,9 +18,9 @@
         <el-row>
           <el-col>
             <el-button :link="true" style="color:#0F0142" @click="reply()">reply</el-button>
-            <el-button v-if="comment.current_user_owns" @click="edit()" size="small" style="color:#0F0142; margin-left: 10px;">
+            <el-button v-if="comment.current_user_owns" @click="edit()" size="small" class="defaultButton" style="margin-left: 10px;">
               edit</el-button>
-            <el-button v-if="comment.current_user_owns" @click="deleteComment()" size="small" style="color:#0F0142; margin-left: 10px;">
+            <el-button v-if="comment.current_user_owns" @click="deleteComment()" size="small" class="defaultButton" style="margin-left: 10px;">
               delete</el-button>
           </el-col>
         </el-row>
@@ -28,14 +28,14 @@
       <el-col :xl="6" :lg="7" :md="8" :sm="9" :xs="10" style="display: flex; align-items: flex-start; justify-content: flex-end;">
         <el-row type="flex">
           <el-col :span="12">
-            <el-button v-if="!comment.current_user_likes" @click="like()" style="color:#0F0142;
+            <el-button v-if="!comment.current_user_likes" @click="like()" class="defaultButton" style="
             margin-right: 10px;" size="large"><el-icon><Top /></el-icon> {{ comment.likes_count }}</el-button>
             <el-button v-else @click="unlike()" style="margin-right: 10px; background-color:#0f0142; color: white"
                        size="large"><el-icon><Top /></el-icon> {{ comment.likes_count }}</el-button>
           </el-col>
           <el-col :span="12">
             <el-button v-if="!comment.current_user_dislikes" @click="dislike()"
-                       style="color:#0F0142" size="large">
+            class="defaultButton" size="large">
               <el-icon><Bottom /> </el-icon> {{ comment.dislikes_count }}</el-button>
             <el-button v-else @click="undislike()" style="margin-right: 10px; background-color:#0f0142; color: white" size="large">
               <el-icon><Bottom /> </el-icon> {{ comment.dislikes_count }}</el-button>

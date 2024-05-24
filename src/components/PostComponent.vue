@@ -4,14 +4,14 @@
             <el-col :xl="1" :lg="2" :md="2" :sm="3" :xs="4">
                 <el-row>
                     <el-col>
-                        <el-button v-if="!post.current_user_likes" @click="like()" style="color:#0f0142" size="large"><el-icon><Top /></el-icon> {{ post.likes_count }}</el-button>
+                        <el-button v-if="!post.current_user_likes" @click="like()" class="defaultButton" size="large"><el-icon><Top /></el-icon> {{ post.likes_count }}</el-button>
                         <el-button v-else @click="unlike()" style="background-color:#0f0142; color: white" size="large"><el-icon><Top /></el-icon> {{ post.likes_count }}</el-button>
                     </el-col>
                 </el-row>
                 <br>
                 <el-row>
                     <el-col>
-                        <el-button v-if="!post.current_user_dislikes" @click="dislike()" style="color:#0f0142" size="large"><el-icon><Bottom /> </el-icon> {{ post.dislikes_count }}</el-button>
+                        <el-button v-if="!post.current_user_dislikes" @click="dislike()" class="defaultButton" size="large"><el-icon><Bottom /> </el-icon> {{ post.dislikes_count }}</el-button>
                         <el-button v-else @click="undislike()" style="background-color:#0f0142; color: white" size="large"><el-icon><Bottom /> </el-icon> {{ post.dislikes_count }}</el-button>
                     </el-col>
                 </el-row>
@@ -30,14 +30,17 @@
                         <el-button style="color:#0F0142" :link="true" @click="goToMagazine()">{{ post.magazine_name }}</el-button>
                     </el-col>
                 </el-row>
-                <el-row>
+                <el-row >
                     <el-col>
                         <el-button :link="true" style="color:#0F0142" @click="goToPost" size="small" >{{ post.comments_count }} comments</el-button>
-                        <el-button v-if="!post.current_user_boosts" @click="boost()" size="small" style="color:#0F0142; margin-left: 10px;">boost ({{ post.boosts_count }})</el-button>
+                        <el-button v-if="!post.current_user_boosts" @click="boost()" size="small" class="defaultButton"  style="margin-left: 10px;">boost ({{ post.boosts_count }})</el-button>
                         <el-button v-else @click="unboost()" size="small" style="background-color:#0f0142; color: white; margin-left: 10px;">unboost ({{ post.boosts_count }})</el-button>
-                        <el-button  v-if="post.current_user_owns" @click="editPost()" size="small" style="color:#0F0142; margin-left: 10px;">edit</el-button>
-                        <el-button  v-if="post.current_user_owns" @click="deletePost()" size="small" style="color:#0F0142; margin-left: 10px;">delete</el-button>
+                        <el-button  v-if="post.current_user_owns" @click="editPost()" size="small" class="defaultButton" style="margin-left: 10px;">edit</el-button>
+                        <el-button  v-if="post.current_user_owns" @click="deletePost()" size="small" class="defaultButton" style="margin-left: 10px;">delete</el-button>
                     </el-col>
+                </el-row>
+                <el-row style="margin-top: 20px; height: 15px;" v-if="showBody">
+                    <el-text style="margin-left:3px"> {{ post.body }} </el-text>
                 </el-row>
             </el-col>
         </el-row>
@@ -65,6 +68,10 @@ export default {
         comments: {
           type: Array,
           default: () => []
+        },
+        showBody: {
+            type: Boolean,
+            default: false
         }
     },
     components: {

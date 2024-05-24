@@ -41,7 +41,7 @@
       <br>
       <el-form-item>
         <div class="button-container">
-          <el-button type="primary" @click="submitForm" class="custom-button">
+          <el-button @click="submitForm" class="newdefaultButton">
             {{ form.id ? 'Update Post' : (isLink ? 'Add new link' : 'Add new thread') }}
           </el-button>
         </div>
@@ -70,7 +70,7 @@ export default {
   },
   data() {
     return {
-      form: this.initialPost,
+      form: {},
       allMagazines: [],
       rules: {
         url: [
@@ -85,6 +85,21 @@ export default {
       },
     };
   },
+  watch: {
+  initialPost: {
+    handler(newValue) {
+      this.form = {
+        ...newValue,
+        title: newValue.title || '',
+        url: newValue.url || '',
+        body: newValue.body || '',
+        magazine_id: newValue.magazine_id || '',
+        rules: newValue.rules || ''
+      };
+    },
+    immediate: true, // This ensures the handler is called right away
+  },
+},
 
   methods: {
     async fetchMagazines() {
@@ -116,7 +131,12 @@ export default {
             if (response.status === 201) {
               ElMessage.success('Post successfully created');
               this.$router.push({ name: 'Posts' });
-            } else {
+            }
+            else if (response.status === 200) {
+              ElMessage.success('Post successfully updated');
+              this.$router.push({ name: 'Posts' });
+            }
+             else {
               ElMessage.error('An unexpected error occurred.');
             }
           } catch (error) {
@@ -138,8 +158,8 @@ export default {
       };
     }
   },
-  created() {
-    this.fetchMagazines();
+  async mounted() {
+    await this.fetchMagazines();
   },
 
 };
