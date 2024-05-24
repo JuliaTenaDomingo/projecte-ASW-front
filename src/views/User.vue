@@ -110,7 +110,9 @@ export default {
     async fetchData() {
       await this.fetchPosts();
       await this.fetchComments();
-      await this.fetchBoosts();
+       if (this.isCurrentUser) {
+          await this.fetchBoosts();
+        }
     },
     async fetchPosts() {
       try {
@@ -226,8 +228,7 @@ export default {
 .cover {
   display: block;
   width: 100%;
-  overflow: hidden;
-  max-height: 200px;
-  object-fit: cover;
+  height: 200px; /* Altura fija */
+  object-fit: cover; /* Mantener proporción sin deformarse */
 }
 </style>
