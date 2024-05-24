@@ -89,11 +89,8 @@ export default {
       this.showPosts = true;
       loadingFS.close();
     },
-    async updatePost(newPost) {
-      const index = this.posts.findIndex(post => post.id === newPost.id);
-      if (index !== -1) {
-        this.posts[index] = newPost;
-      }
+    async updatePost() {
+      await this.getPosts();
     },
     async deletePost() {
       await this.getPosts();

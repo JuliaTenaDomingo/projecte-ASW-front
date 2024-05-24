@@ -50,11 +50,8 @@ export default {
       else ElMessage.error('Error retrieving magazines');
       loadingFS.close();
     },
-    updateMagazine(newMagazine) {
-        const index = this.magazines.findIndex(magazine => magazine.id === newMagazine.id);
-        if (index !== -1) {
-            this.magazines[index] = newMagazine;
-        }
+    async updateMagazine() {
+        await this.getMagazines()
     },
   },
   async mounted() {
