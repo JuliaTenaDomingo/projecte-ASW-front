@@ -35,14 +35,19 @@
         <PostComponent :post="post" @updatePost="updatePost" ></PostComponent>
       </div>
       <div v-for="comment in comments" :key="comment.id">
-<!--        <CommentComponent :comment="comment"></CommentComponent>-->
+        <CommentComponent :comment="comment"></CommentComponent>
       </div>
     </div>
     <div v-if="activeTab === 'posts'" class="posts">
-      <PostComponent v-for="post in posts" :key="post.id" :post="post" @updatePost="updatePost" ></PostComponent>
+      <PostComponent v-for="post in posts" :key="post.id" :post="post" @updatePost="updatePost" @editComment="editComment" ></PostComponent>
     </div>
     <div v-if="activeTab === 'comments'" class="comments">
-<!--      <CommentComponent v-for="comment in comments" :key="comment.id" :comment="comment"></CommentComponent>-->
+      <CommentComponent v-for="comment in comments" :key="comment.id" :comment="comment" @updateComment="updateComment" :commentToEdit="commentToEdit"
+                        @editComment="editComment"
+                        :commentToReply="commentToReply"
+                        @replyComment="replyComment"
+                        :showParent="true"
+      ></CommentComponent>
     </div>
     <div v-if="activeTab === 'boosts'" class="boosts">
       <PostComponent v-for="boost in boosts" :key="boost.id" :post="boost"  @updatePost="updatePost" ></PostComponent>
@@ -55,13 +60,13 @@ import { mapGetters } from 'vuex';
 import users from '@/services/users';
 import posts from '@/services/posts';
 import PostComponent from '@/components/PostComponent.vue';
-// import CommentComponent from '@/components/CommentComponent.vue';
+import CommentComponent from '@/components/CommentComponent.vue';
 
 export default {
   name: 'User',
   components: {
     PostComponent,
-    // CommentComponent
+    CommentComponent
   },
   data() {
     return {
@@ -69,6 +74,8 @@ export default {
       posts: [],
       comments: [],
       boosts: [],
+      commentToEdit: null,
+      commentToReply: null,
       activeTab: 'all',
       rules: {
         username: [
@@ -184,6 +191,17 @@ export default {
       if (this.$route.params.userId !== userId.toString()) {
         this.$router.push({ path: `/users/${userId}` });
       }
+    },
+    async updateComment() {
+      await this.fetchData();
+
+    },
+    async editComment(comment) {
+      this.commentToEdit = comment;
+    },
+    async replyComment(comment) {
+      this.commentToReply = comment;
+      await this.fetchData();
     }
   }
 };

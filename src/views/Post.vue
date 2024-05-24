@@ -93,6 +93,7 @@ export default {
 
     //Edit comments
     async updateComment(updatedComment) {
+      console.log("Step2")
       location.reload()
       const index = this.comments.findIndex(comment => comment.id === updatedComment.id);
       if (index !== -1) {
