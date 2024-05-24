@@ -116,13 +116,11 @@ export default {
       }
     },
     async fetchData() {
-      const loadingFS = ElLoading.service({ fullscreen: true, text: 'Loading', background: 'rgba(255,255,255,0.7)' });
       await this.fetchPosts();
       await this.fetchComments();
        if (this.isCurrentUser) {
           await this.fetchBoosts();
-        }
-      loadingFS.close();
+        } 
     },
     async fetchPosts() {
       try {
@@ -164,8 +162,10 @@ export default {
       await this.fetchData();
     },
     async refreshData() {
+      const loadingFS = ElLoading.service({ fullscreen: true, text: 'Loading', background: 'rgba(255,255,255,0.7)' });
       await this.fetchUser();
       await this.fetchData();
+      loadingFS.close();
     },
     updateRoute(userId) {
       if (this.$route.params.userId !== userId.toString()) {
