@@ -10,6 +10,9 @@ export default {
     async create(post) {
         return await axios.post(`/posts`, post)
     },
+    async edit(id, post) {
+        return await axios.put(`/posts/${id}`, post)
+    },
     async like(postId) {
         return await axios.post(`/posts/${postId}/like`)
     },

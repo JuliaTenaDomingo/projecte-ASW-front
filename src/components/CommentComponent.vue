@@ -129,6 +129,7 @@ export default {
       const response = await comments.removeComment(this.$route.params.post_id, this.comment.id);
       if (response.status === 200 || response.status === 204) {
         this.$emit('commentDeleted', this.comment.id);
+        ElMessage.success('Comment successfully deleted');
       } else {
         console.error('Error deleting comment. Status:', response.status, 'Response data:', response.data);
       }

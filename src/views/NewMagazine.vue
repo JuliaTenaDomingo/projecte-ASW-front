@@ -79,10 +79,14 @@ export default {
           try {
             const response = await magazineService.create(this.form);
             this.resetForm();
-            ElMessage.success('Successfully created magazine!');
-            this.$router.push({ name: 'Magazine', params: { magazine_id: response.data.id }});
+            if (response.status === 201) {
+              ElMessage.success('Magazine successfully created');
+              this.$router.push({name: 'Magazine', params: {magazine_id: response.data.id}});
+            } else {
+              ElMessage.error('Error creating magazine');
+            }
           } catch (error) {
-            console.error('Error submitting form:', error);
+            ElMessage.error('Magazine with this name already exists');
           }
         } else {
           return false;

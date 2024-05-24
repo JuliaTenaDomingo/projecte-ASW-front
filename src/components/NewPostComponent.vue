@@ -1,6 +1,6 @@
 <template>
   <el-card class="post-form" shadow="hover">
-    <h3>{{ isLink ? 'New link' : 'New thread' }}</h3>
+    <h3 v-if="!form.id">{{ isLink ? 'New link' : 'New thread' }}</h3>
     <el-form :model="form" ref="form" :rules="rules" label-width="120px" label-position="top">
       <el-form-item v-if="isLink" label="URL" prop="url">
         <el-input
@@ -41,7 +41,10 @@
       <br>
       <el-form-item>
         <div class="button-container">
-          <el-button type="primary" @click="submitForm" class="custom-button">{{ isLink ? 'Add new link' : 'Add new thread' }}</el-button>        </div>
+          <el-button type="primary" @click="submitForm" class="custom-button">
+            {{ form.id ? 'Update Post' : (isLink ? 'Add new link' : 'Add new thread') }}
+          </el-button>
+        </div>
       </el-form-item>
     </el-form>
   </el-card>
@@ -97,20 +100,25 @@ export default {
         if (valid) {
           try {
             let response;
+            //Editing post
             if (this.form.id) {
-              console.log('Editing post')
               const { title, url, body, magazine_id } = this.form;
               const post = { title, url, body, magazine_id };
-              console.log(post);
               response = await posts.edit(this.form.id, post);
-            } else {
-              console.log('Creating post')
-              console.log(this.form);
+            }
+            //Creating new post
+            else {
               response = await posts.create(this.form);
             }
+
             this.resetForm();
-            ElMessage.success('Successfully created post!');
-            this.$router.push({ name: 'Posts' });
+
+            if (response.status === 201) {
+              ElMessage.success('Post successfully created');
+              this.$router.push({ name: 'Posts' });
+            } else {
+              ElMessage.error('An unexpected error occurred.');
+            }
           } catch (error) {
             console.error('Error submitting form:', error);
           }
