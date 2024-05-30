@@ -1,14 +1,17 @@
 import axios from "@/services/backend"
 
 export default {
-    async list(type, sort) {
-        return await axios.get(`/posts?sort=${sort}&type=${type}`)
+    async list(type, sort, search) {
+        return await axios.get(`/posts?sort=${sort}&type=${type}&search=${search}`)
     },
     async retrieve(id) {
         return await axios.get(`/posts/${id}`)
     },
     async create(post) {
         return await axios.post(`/posts`, post)
+    },
+    async edit(id, post) {
+        return await axios.put(`/posts/${id}`, post)
     },
     async like(postId) {
         return await axios.post(`/posts/${postId}/like`)
@@ -30,6 +33,8 @@ export default {
     },
     async remove(postId) {
         return await axios.delete(`/posts/${postId}`)
+    },
+    async delete(postId) {
+        return await axios.delete(`/posts/${postId}`)
     }
-
 }
